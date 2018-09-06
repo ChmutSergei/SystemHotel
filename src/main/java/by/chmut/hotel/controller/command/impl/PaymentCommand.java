@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static by.chmut.hotel.controller.command.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
 
 public class PaymentCommand implements Command {
     private ServiceFactory factory = ServiceFactory.getInstance();

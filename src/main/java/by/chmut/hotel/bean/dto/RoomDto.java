@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 
-public class ClientDTO {
+public class RoomDto {
 
     private int roomNumber;
     private int bedType;

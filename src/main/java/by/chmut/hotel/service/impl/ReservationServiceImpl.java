@@ -1,8 +1,5 @@
 package by.chmut.hotel.service.impl;
 
-import by.chmut.hotel.bean.Room;
-import by.chmut.hotel.bean.User;
-import by.chmut.hotel.bean.dto.ClientDTO;
 import by.chmut.hotel.dao.DAOFactory;
 import by.chmut.hotel.dao.ReservationDao;
 import by.chmut.hotel.bean.Reservation;
@@ -11,8 +8,6 @@ import by.chmut.hotel.service.ServiceException;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationServiceImpl extends AbstractService implements ReservationService {

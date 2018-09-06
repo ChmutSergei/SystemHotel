@@ -1,6 +1,6 @@
 package by.chmut.hotel.dao;
 
-import by.chmut.hotel.dao.impl.ClientDtoImpl;
+import by.chmut.hotel.dao.impl.RoomDtoImpl;
 import by.chmut.hotel.dao.impl.ReservationDaoImpl;
 import by.chmut.hotel.dao.impl.RoomDaoImpl;
 import by.chmut.hotel.dao.impl.UserDaoImpl;
@@ -11,7 +11,7 @@ public class DAOFactory {
     private final ReservationDao reservationDao = new ReservationDaoImpl();
     private final RoomDao roomDao = new RoomDaoImpl();
     private final UserDao userDao = new UserDaoImpl();
-    private final ClientDtoImpl clientDto = new ClientDtoImpl();
+    private final RoomDtoImpl clientDto = new RoomDtoImpl();
 
     public ReservationDao getReservationDao() {
         return reservationDao;
@@ -25,7 +25,7 @@ public class DAOFactory {
         return userDao;
     }
 
-    public ClientDtoImpl getClientDto() {
+    public RoomDtoImpl getClientDto() {
         return clientDto;
     }
 

@@ -1,6 +1,6 @@
 package by.chmut.hotel.dao;
 
-import by.chmut.hotel.bean.dto.ClientDTO;
+import by.chmut.hotel.bean.dto.RoomDto;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface Dto {
 
-    List<ClientDTO> getClientInfoOnDay(LocalDate date) throws SQLException;
+    List<RoomDto> getRoomWithCheckInOrDepartureForThisDay(LocalDate date) throws SQLException;
 }

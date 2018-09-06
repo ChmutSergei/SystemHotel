@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.chmut.hotel.controller.command.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
 
 
 public class ReservationCommand implements Command {

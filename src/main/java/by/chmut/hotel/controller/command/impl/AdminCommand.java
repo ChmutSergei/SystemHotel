@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static by.chmut.hotel.controller.command.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
 
 public class AdminCommand implements Command {
     private ServiceFactory factory = ServiceFactory.getInstance();
@@ -17,7 +17,7 @@ public class AdminCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        req.getSession().setAttribute("client", factory.getDtoService().getClientInfoOnDay(LocalDate.now()));
+        req.getSession().setAttribute("client", factory.getDtoService().getRoomWithCheckInOrDepartureForThisDay(LocalDate.now()));
 
         req.getRequestDispatcher(MAIN_PAGE).forward(req,resp);
     }

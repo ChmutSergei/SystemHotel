@@ -1,6 +1,6 @@
 package by.chmut.hotel.service.impl;
 
-import by.chmut.hotel.bean.dto.ClientDTO;
+import by.chmut.hotel.bean.dto.RoomDto;
 import by.chmut.hotel.dao.DAOFactory;
 import by.chmut.hotel.service.DtoService;
 
@@ -13,10 +13,10 @@ public class DtoServiceImpl extends AbstractService implements DtoService {
     private DAOFactory factory = DAOFactory.getInstance();
 
     @Override
-    public List<ClientDTO> getClientInfoOnDay(LocalDate date) {
+    public List<RoomDto> getRoomWithCheckInOrDepartureForThisDay(LocalDate date) {
         try {
             startTransaction();
-            List<ClientDTO> result = factory.getClientDto().getClientInfoOnDay(date);
+            List<RoomDto> result = factory.getClientDto().getRoomWithCheckInOrDepartureForThisDay(date);
             commit();
             return result;
         } catch (SQLException e) {

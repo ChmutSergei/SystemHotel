@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static by.chmut.hotel.controller.command.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
 
 
 public class AddAccountCommand implements Command {
