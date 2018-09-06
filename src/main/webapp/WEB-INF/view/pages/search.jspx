@@ -1,0 +1,282 @@
+<jsp:root xmlns="http://www.w3.org/1999/xhtml"
+          xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          version="2.0">
+    <fmt:setLocale value="${sessionScope.locale}"/>
+    <c:set var="loc" value="${sessionScope.locale}" />
+    <fmt:setBundle basename="messages" var="i18n"/>
+    <!--Rooms-->
+    <div class="container col-xs-12" style="background-color:#e6f7d9;width: 110%">
+
+        <div class="row">
+
+            <!--Block for booking-->
+            <!-- Date input -->
+
+            <div id="bookingBar" class="container-fluid col-xs-3">
+                <div id="bookBar" class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="0">
+                    <div class="row" style="background-color: #9d9d9d;padding: 10px;">
+                        <span class="headBar col-xs-12" style="font-size: large;padding: 5px;"><strong><fmt:message key="navbar.head" bundle="${i18n}"/></strong></span>
+                        <c:set var="namecheckin"><fmt:message key="navbar.checkin" bundle="${i18n}"/></c:set>
+                        <c:set var="namecheckout"><fmt:message key="navbar.checkout" bundle="${i18n}"/></c:set>
+                        <form action="${pageContext.request.contextPath}/frontController?pageName=search" name="booking" method="post">
+                            <div class="form-group">
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.checkIn}">
+                                        <div class="input-group date" id="datetimepicker7">
+                                            <input class="form-control col-xs-5"  name="checkin" required="" placeholder="${sessionScope.checkIn}" style="margin: 0px" />
+                                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="input-group date" id="datetimepicker1">
+                                            <input class="form-control col-xs-5"  name="checkin" required="" placeholder="${namecheckin}" style="margin: 0px" />
+                                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="form-group">
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.checkOut}">
+                                        <div class="input-group date" id="datetimepicker8">
+                                            <input  class="form-control col-xs-5" name="checkout" required="" placeholder="${sessionScope.checkOut}" style="margin: 0px" />
+                                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="input-group date" id="datetimepicker2">
+                                            <input  class="form-control col-xs-5" name="checkout" required="" placeholder="${namecheckout}" style="margin: 0px" />
+                                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="form-group row" >
+                                <label class="text-left col-xs-4 col-xs-offset-1" for="sel1"><fmt:message key="navbar.adults" bundle="${i18n}"/></label>
+                                <div class="col-xs-7">
+                                    <select class="form-control" id="sel1" name="bedtype" >
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select></div>
+
+                            </div>
+                            <div class="form-group" >
+                                <c:set var="booking"><fmt:message key="navbar.booknow" bundle="${i18n}"/></c:set>
+                                <div class="btnbook"  style="margin: 10px !important;">
+                                    <input type="submit"  class="checkout col-xs-8 col-xs-offset-2" value="${booking}" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--Print rooms-->
+
+            <div class="col-xs-9">
+                <c:forEach var="room" items="${sessionScope.rooms}" varStatus="status">
+
+                    <div class="arrows-on-right-horizontal">
+                        <div class="row">
+                        <div class="col col-xs-7">
+                            <img id="imgRooms" src="${pageContext.request.contextPath}/assests/img/rooms/${status.index+1}.jpg"/>
+                        </div>
+                        <div class="col col-xs-5">
+                            <h3 class="card-title">${room.type}</h3>
+                            <h3>Количество спальных мест - ${room.bedType} </h3>
+                            <p class="card-text" style="font-size: large">${room.description}</p>
+                            <p class="card-text">
+                                Всего : ${room.price}
+                            </p>
+                            <div class="btnlearnmore" style="margin: 10px !important;">
+                                <button class="bnt" onclick="document.getElementById('id02').style.display='block'"
+                                        style="background-color: transparent;color:#c09c76;font-size: 20px"> Learn more
+                                </button>
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.checkIn}">
+                                <a id="${room.id}" class="reservation" role="button"
+                                   style="font-size: 25px;color: black;background-color:transparent;text-decoration: none;"
+                                   href="${pageContext.request.contextPath}/frontController?pageName=reservation"> Reservation
+                                </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a id="bnt_reserv2" class="btn" role="button"
+                                           style="font-size: 25px;color: black;background-color:transparent"
+                                           href="#" data-toggle="popover" title="Не указаны данные" data-content="Пожалуйста, укажите даты для резервирования"> Reservation
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+
+    <!--  Modal  -->
+    <div class="row">
+    <div class="modal" id="id02" role="dialog">
+        <div class="modal-dialog1">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">ОПИСАНИЕ</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="font-size: large">Каждый из 102 великолепных номеров отеля располагает мебелью,
+                        и современными технологиями, в том числе бесплатным Wi-Fi и плоскими ЖК-телевизорами с кабельными каналами.
+                        Помимо этого, просторные гардеробные и ванные комнаты предоставляют обширное пространство,
+                        а эксклюзивные ванные принадлежности Elemis,
+                        мягкие халаты и тапочки обеспечат совершенное расслабление.
+                        Кроме того, многие номера предлагают неповторимые виды на город.
+                        Наши 55 люксов украшены эксклюзивными элементами, включая лампы, зеркала, статуи и картины.
+
+                        ВАННАЯ КОМНАТА
+                        Ванные принадлежности Penhaligon's
+                        Фен
+                        Телефон в ванной комнате
+                        Зеркало для макияжа и бритья
+                        Банные халаты и тапочки
+                        Весы в ванной комнате
+                        ЕДА
+                        Круглосуточная доставка еды в номер
+                        Кофеварка и чайник (по запросу)
+                        Мини-бар (платный)
+                        Бесплатная вода в бутылках
+                        ОПИСАНИЕ НОМЕРА
+                        Кондиционер
+                        Смежные номера (по запросу)
+                        Сейф для ноутбука в номере
+                        Гостиничные номера для некурящих
+                        Гостиничные номера для некурящих
+                        Зеркало в полный рост
+                        ОФИСНОЕ ОБОРУДОВАНИЕ
+                        Телефон
+                        Телефоны для автоматической международной связи
+                        Рабочий стол
+                        Будильник
+                        РАЗВЛЕЧЕНИЯ
+                        Журналы
+                        Спутниковые каналы
+                        Плоский ЖК-телевизор
+                        РАЗНОВИДНОСТИ КРОВАТЕЙ
+                        Ассортимент гипоаллергенных подушек
+                        Роскошное постельное белье
+                        Детские кровати (по запросу)
+                        Фирменная кровать Luxury Collection
+                        УДОБСТВА И УСЛУГИ В НОМЕРАХ
+                        Услуга «утренняя побудка»
+                        Ежевечерняя подготовка номера ко сну
+                        Пресс для утюжки брюк
+                        Набор для шитья
+                        Сопровождение в номер после регистрации
+                        Услуги по чистке обуви
+                        Зонтики
+                        Обслуживание автомашин работниками отеля
+                        Датчики дыма и система пожаротушения
+                        ДОСТУП В ИНТЕРНЕТ
+                        Доступ в Интернет в номерах (Бесплатно)
+                        Некоторые из удобств могут предоставляться не во всех номерах.
+                        За некоторые удобства/услуги может взиматься дополнительная плата.
+                        Заселение: 14:00 Выезд: 12:00</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"
+                            onclick="document.getElementById('id02').style.display='none'">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    <script>
+        /*// Get the modal*/
+        var modal2 = document.getElementById('id02');
+
+        /*// When the user clicks anywhere outside of the modal, close it*/
+        window.onclick = function (event) {
+            if (event.target == modal2) {
+                modal2.style.display = "none";
+            }
+        }
+
+
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();
+            $('.reservation').click(function () {
+                addRoomId($(this));
+            });
+        });
+
+        function addRoomId(element) {
+            var roomId = $(element).attr('id');
+            var contextUrl = '${pageContext.request.contextPath}';
+            $.ajax({
+                type: 'post',
+                url: contextUrl + '/frontController',
+                data:{pageName:'setRoomId', roomId:roomId}
+            });
+        }
+        $(function () {
+            // инициализация datetimepicker7 и datetimepicker8
+            $("#datetimepicker1").datetimepicker({
+                format: 'DD.MM.YYYY'
+            });
+            $('#datetimepicker1').data("DateTimePicker").minDate(moment('22.07.2018','DD.MM.YYYY'));
+
+            $("#datetimepicker2").datetimepicker({
+                format: 'DD.MM.YYYY',
+                useCurrent: false
+
+            });
+
+            $("#datetimepicker1").on("dp.change", function (e) {
+                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker2").on("dp.change", function (e) {
+                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+        $(function () {
+            // инициализация datetimepicker7 и datetimepicker8
+            $("#datetimepicker7").datetimepicker({
+                format: 'DD.MM.YYYY'
+            });
+            $('#datetimepicker7').data("DateTimePicker").minDate(moment('22.07.2018','DD.MM.YYYY'));
+
+            $("#datetimepicker8").datetimepicker({
+                format: 'DD.MM.YYYY',
+                useCurrent: false
+
+            });
+
+            $("#datetimepicker7").on("dp.change", function (e) {
+                $('#datetimepicker8').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker8").on("dp.change", function (e) {
+                $('#datetimepicker7').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+
+    </script>
+
+
+</jsp:root>

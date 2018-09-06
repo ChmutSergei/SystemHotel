@@ -1,0 +1,147 @@
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+          xmlns:c="http://java.sun.com/jsp/jstl/core"
+          xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+          xmlns="http://www.w3.org/1999/xhtml" version="2.0">
+    <div class="container" style="background-color:#e6f7d9;">
+    <fmt:setLocale value="${sessionScope.locale}"/>
+    <fmt:setBundle basename="messages" var="i18n"/>
+    <c:if test="${not empty sessionScope.errorMsg}">
+        <c:set var="ermessage"><fmt:message key="${sessionScope.errorMsg}" bundle="${i18n}"/></c:set>
+        <div class="alert alert-warning col-xs-6 left-arrow">
+             <strong>${ermessage}</strong><fmt:message bundle="${i18n}" key="error.messagereg"/>
+        </div>
+    </c:if>
+    <fieldset id="contact" class="container">
+        <h2><fmt:message bundle="${i18n}" key="contact.registration"/></h2>
+        <p><fmt:message bundle="${i18n}" key="contact.info"/></p>
+        <form class="form-horizontal" action="${pageContext.request.contextPath}/frontController?pageName=create_user" method="post">
+            <![CDATA[
+            <legend>
+            ]]>
+            <fmt:message bundle="${i18n}" key="contact.contact"/>
+            <![CDATA[
+            </legend>
+            ]]>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="lastName"><fmt:message bundle="${i18n}" key="contact.lastname"/></label>
+                <div class="col-xs-6">
+                    <c:set var="inputlname"><fmt:message key="input.lname" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="lastName" placeholder="${inputlname}" name="lastName" required="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="firstName"><fmt:message bundle="${i18n}" key="contact.name"/></label>
+                <div class="col-xs-6">
+                    <c:set var="inputname"><fmt:message key="input.fname" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="firstName" placeholder="${inputname}"  name="firstName" required="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="inputEmail"><fmt:message bundle="${i18n}" key="contact.email"/></label>
+                <div class="col-xs-6">
+                    <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="phoneNumber"><fmt:message bundle="${i18n}" key="contact.phone"/></label>
+                <div class="col-xs-6">
+                    <c:set var="phone"><fmt:message key="input.phone" bundle="${i18n}"/></c:set>
+                    <input type="tel" class="form-control" id="phoneNumber" placeholder="${phone}" name="phone" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="country"><fmt:message bundle="${i18n}" key="contact.country"/></label>
+                <div class="col-xs-6">
+                    <c:set var="country"><fmt:message key="input.country" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="country" placeholder="${country}" name="country" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="city"><fmt:message bundle="${i18n}" key="contact.city"/></label>
+                <div class="col-xs-6">
+                    <c:set var="city"><fmt:message key="input.city" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="city" placeholder="${city}" name="city" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="address"><fmt:message bundle="${i18n}" key="contact.address"/></label>
+                <div class="col-xs-6">
+                    <c:set var="address"><fmt:message key="input.address" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="address" placeholder="${address}" name="address" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="zip"><fmt:message bundle="${i18n}" key="contact.zip"/></label>
+                <div class="col-xs-6">
+                    <c:set var="zip"><fmt:message key="input.zip" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="zip" placeholder="${zip}" name="zip" />
+                </div>
+            </div>
+        <!--</form>-->
+    <!--</fieldset>-->
+
+    <fieldset id="userpass" class="container">
+        <!--<form class="form-horizontal">-->
+            <![CDATA[
+            <legend>
+            ]]>
+            <fmt:message bundle="${i18n}" key="contact.createname"/>
+             <![CDATA[
+             </legend>
+            ]]>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="login"><fmt:message bundle="${i18n}" key="contact.username"/></label>
+                <div class="col-xs-6">
+                    <c:set var="elogin"><fmt:message key="input.login" bundle="${i18n}"/></c:set>
+                    <input type="text" class="form-control" id="login" placeholder="${elogin}" name="login" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="inputPassword"><fmt:message bundle="${i18n}" key="contact.pass"/></label>
+                <div class="col-xs-6">
+                    <c:set var="pass"><fmt:message key="input.pass" bundle="${i18n}"/></c:set>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="${pass}" name="password" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-3" for="confirmPassword"><fmt:message bundle="${i18n}" key="contact.conpass"/></label>
+                <div class="col-xs-6">
+                    <c:set var="reppass"><fmt:message key="input.reppass" bundle="${i18n}"/></c:set>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="${reppass}" required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-6">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" value="agree" required=""/>  <fmt:message bundle="${i18n}" key="contact.agree"/> <a href="#"> <fmt:message bundle="${i18n}" key="contact.agreelink"/></a>.
+                    </label>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-xs-offset-3 col-xs-6">
+                    <c:set var="submit"><fmt:message key="contact.regictr" bundle="${i18n}"/></c:set>
+                    <c:set var="reset"> <fmt:message key="contact.reset" bundle="${i18n}"/> </c:set>
+                    <input type="submit" class="btn btn-primary col-xs-3" value="${submit}" />
+                    <span class="emptyfield col-xs-3 ">   </span>
+                    <input type="reset" class="btn btn-default col-xs-3" style="width: 100px;" value="${reset}" />
+                </div>
+            </div>
+    </fieldset>
+        </form>
+    </fieldset>
+
+    </div>
+    <script>
+        $(function() {
+            $('form').keydown(function(event){
+                if(event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+
+</jsp:root>
