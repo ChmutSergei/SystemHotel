@@ -5,7 +5,7 @@ CREATE TABLE Contacts(id INT PRIMARY KEY AUTO_INCREMENT, email CHAR(20), telepho
 CREATE TABLE Users(id INT PRIMARY KEY AUTO_INCREMENT, login CHAR(20), password CHAR(30), name CHAR(20),lastname CHAR(20),
                    role CHAR (15),contact_id INT, FOREIGN KEY (contact_id) REFERENCES Contacts(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 CREATE TABLE Rooms(id INT PRIMARY KEY AUTO_INCREMENT, roomNumber INT,type CHAR(15),bedType INT,
-                   price DOUBLE, description TEXT);
+                   price INT, description TEXT);
 CREATE TABLE Reservation (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, room_id INT,checkIn DATE,checkOut DATE, date DATE,
   FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE,
   FOREIGN KEY (room_id) REFERENCES Rooms(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
@@ -20,31 +20,31 @@ INSERT INTO Users (login, password, name, lastname, role, contact_id) VALUES ("u
 INSERT INTO Users (login, password, name, lastname, role, contact_id) VALUES ("user5", "gdyb21LQTcIANtvYMT7QVQ==","Sveta", "Puko", "user",2);
 INSERT INTO Users (login, password, name, lastname, role, contact_id) VALUES ("user6", "gdyb21LQTcIANtvYMT7QVQ==","Jenya", "Derevyanko", "user",3);
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (1,'Супер Люкс',3,128.9,
+VALUES (1,'Супер Люкс',3,1289,
         'Приятный и уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (2,'Люкс',2,58.9,
+VALUES (2,'Люкс',2,589,
         'Уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (3,'Супер Люкс',2,115.9,
+VALUES (3,'Супер Люкс',2,1159,
         'Приятный и уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (4,'Люкс',3,109.9,
+VALUES (4,'Люкс',3,1099,
         'Уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (5,'Люкс',1,89.9,
+VALUES (5,'Люкс',1,899,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (6,'Люкс',1,79.9,
+VALUES (6,'Люкс',1,799,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (7,'Люкс',1,82.9,
+VALUES (7,'Люкс',1,829,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price,  description)
-VALUES (8,'СуперЛюкс',1,89.9,
+VALUES (8,'СуперЛюкс',1,899,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price,  description)
-VALUES (9,'СуперЛюкс',4,189.5,
+VALUES (9,'СуперЛюкс',4,1895,
         'Приятный и уютный номер распологается на первом этаже с видом на город');
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (2,2,'2018-09-03','2018-09-05','2018-07-10');
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (3,3,'2018-09-05','2018-09-06','2018-07-10');

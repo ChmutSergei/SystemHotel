@@ -18,6 +18,7 @@ import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAG
 
 
 public class SearchCommand implements Command {
+
     private ServiceFactory factory = ServiceFactory.getInstance();
     private RoomService roomService = factory.getRoomService();
 

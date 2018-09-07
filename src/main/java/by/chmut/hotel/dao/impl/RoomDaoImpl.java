@@ -33,9 +33,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
         room.setRoomNumber(rs.getInt(2));
         room.setType(rs.getString(3));
         room.setBedType(rs.getInt(4));
-        room.setPrice(rs.getDouble(5));
-//        room.setCheckIn(rs.getDate(6).toLocalDate());
-//        room.setCheckOut(rs.getDate(7).toLocalDate());
+        room.setPrice(rs.getLong(5));
         room.setDescription(rs.getString(6));
         return room;
     }
@@ -69,7 +67,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
         psSave.setInt(1,room.getRoomNumber());
         psSave.setString(2,room.getType());
         psSave.setInt(3,room.getBedType());
-        psSave.setDouble(4,room.getPrice());
+        psSave.setLong(4,room.getPrice());
         psSave.setString(5,room.getDescription());
         psSave.executeUpdate();
         ResultSet rs = psSave.getGeneratedKeys();
@@ -98,9 +96,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
         psUpdate.setInt(5,room.getRoomNumber());
         psUpdate.setString(1,room.getType());
         psUpdate.setInt(2,room.getBedType());
-        psUpdate.setDouble(3,room.getPrice());
-//        psUpdate.setDate(4,java.sql.Date.valueOf(room.getCheckIn()));
-//        psUpdate.setDate(5,java.sql.Date.valueOf(room.getCheckOut()));
+        psUpdate.setLong(3,room.getPrice());
         psUpdate.setString(4,room.getDescription());
         psUpdate.executeUpdate();
     }

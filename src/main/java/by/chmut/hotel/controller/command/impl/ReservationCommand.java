@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
@@ -22,80 +25,87 @@ import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAG
 
 public class ReservationCommand implements Command {
     private ServiceFactory factory = ServiceFactory.getInstance();
-    private RoomService roomService = factory.getRoomService();
-    private ReservationService reservationService = factory.getReservationService();
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
-        double totalSum;
+        long totalSum = getTotalSum(session);
+        List<Room> roomTemp = getRoomTemp(session);
+        Integer roomId = (Integer) session.getAttribute("roomId");
         User user = (User) session.getAttribute("user");
+
         // search - if user user has paid reservation - set to session for view
-        if (user != null) {
-            List<Reservation> lastReservations = reservationService.getByUserId(user.getId());
-            if (!lastReservations.isEmpty()) {
-                List<Room> paidRooms = new ArrayList<>();
-                for (Reservation reservation : lastReservations) {
-                    Room room = roomService.get(reservation.getRoomId());
-                    room.setCheckIn(reservation.getCheckIn());
-                    room.setCheckOut(reservation.getCheckOut());
-                    paidRooms.add(room);
-                }
-                session.setAttribute("paidRooms", paidRooms);
+        setPaidRoomsInSession(session, user);
+
+        if (roomId != null) {
+            Room room = getRoomById(session, roomId);
+
+            if (req.getParameter("delete") == null) {
+                // Add room
+                roomTemp.add(room);
+                totalSum += room.getPrice();
+            } else {
+                // Remove room
+                roomTemp.remove(room);
+                totalSum -= room.getPrice();
             }
-        }
-        if (session.getAttribute("totalSum") != null) {
-            totalSum = (Double) session.getAttribute("totalSum");
-        } else {
-            totalSum = 0;
-            session.setAttribute("totalSum", totalSum);
-        }
-        // Add room
-        List<Room> roomTemp = new ArrayList<>();
-        if (session.getAttribute("roomTemp") != null) {
-            roomTemp = (List<Room>) session.getAttribute("roomTemp");
-        }
-        if ((req.getParameter("delete") == null)&&(session.getAttribute("roomId") != null)) {
-            int roomId = (Integer) session.getAttribute("roomId");
             session.removeAttribute("roomId");
-            Room room = roomService.get(roomId);
-            room.setCheckIn((LocalDate) req.getSession().getAttribute("checkIn"));
-            room.setCheckOut((LocalDate) req.getSession().getAttribute("checkOut"));
-            roomTemp.add(room);
-            totalSum = (Double) session.getAttribute("totalSum") + room.getPrice();
-            totalSum = roundResult(totalSum);
-            session.setAttribute("totalSum", totalSum);
             session.setAttribute("roomTemp", roomTemp);
+            session.setAttribute("totalSum", totalSum);
         }
-        // Remove room
-        if ((req.getParameter("delete") != null)&&(session.getAttribute("roomId")!=null)) {
-            int delIndex = -1;
-            for (int i = 0; i < roomTemp.size(); i++) {
-                Room room = roomTemp.get(i);
-                if (room.getId() == (int) (session.getAttribute("roomId"))) {
-                    delIndex = i;
-                    totalSum = (Double) session.getAttribute("totalSum") - room.getPrice();
-                    totalSum = roundResult(totalSum);
-                }
-            }
-            if (delIndex != -1) {
-                roomTemp.remove(delIndex);
-                session.setAttribute("roomTemp", roomTemp);
-                session.removeAttribute("roomId");
-                session.setAttribute("totalSum", totalSum);
-            }
-        }
+        // set Empty message
         if (roomTemp.isEmpty()) {
             req.setAttribute("emptyMsg", "reserv.emptyList");
         }
         req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
+
+    }
+
+    private void setPaidRoomsInSession(HttpSession session,User user) {
+        try {
+            session.setAttribute("paidRooms", factory.getReservationService().getPaidRoomsIfUserHasThem(user));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    private double roundResult (double d) {
-        d = d*100;
-        int i = (int) Math.round(d);
-        return (double) i/100;
+    private Room getRoomById(HttpSession session, Integer roomId) {
+
+        Room result = factory.getRoomService().get(roomId);
+
+        result.setCheckIn((LocalDate) session.getAttribute("checkIn"));
+
+        result.setCheckOut((LocalDate) session.getAttribute("checkOut"));
+
+        return result;
+    }
+
+    private long getTotalSum(HttpSession session) {
+
+        if (session.getAttribute("totalSum") != null) {
+
+            return (long) session.getAttribute("totalSum");
+        }
+        session.setAttribute("totalSum", 0L);
+
+        return 0L;
+    }
+
+    private List<Room> getRoomTemp(HttpSession session) {
+
+        List<Room> result = (List<Room>) session.getAttribute("roomTemp");
+
+        if (result != null) {
+            return result;
+        }
+
+        result = new ArrayList<>();
+
+        session.setAttribute("roomTemp", new ArrayList<Room>());
+
+        return result;
     }
 
 }
+

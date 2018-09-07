@@ -16,12 +16,12 @@ public class Room implements Serializable {
     private int roomNumber;
     private String type;
     private int bedType;
-    private double price;
+    private long price;
     private LocalDate checkIn;
     private LocalDate checkOut;
     private String description;
 
-    public Room(int roomNumber, String type, int bedType, double price, LocalDate checkIn, LocalDate checkOut, String description) {
+    public Room(int roomNumber, String type, int bedType, long price, LocalDate checkIn, LocalDate checkOut, String description) {
         this.roomNumber = roomNumber;
         this.type = type;
         this.bedType = bedType;
@@ -36,7 +36,13 @@ public class Room implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        if (roomNumber != room.roomNumber || bedType == room.bedType || price != room.price) {
+        if (roomNumber != room.roomNumber ) {
+            return false;
+        }
+        if (bedType != room.bedType ) {
+            return false;
+        }
+        if (price != room.price ) {
             return false;
         }
         if (type == null) {

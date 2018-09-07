@@ -47,7 +47,6 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
         return list;
     }
 
-
     @Override
     public Reservation save(Reservation reservation) throws SQLException {
         PreparedStatement psReservation = prepareStatement(saveQuery, Statement.RETURN_GENERATED_KEYS);

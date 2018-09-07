@@ -1,5 +1,7 @@
 package by.chmut.hotel.service.impl;
 
+import by.chmut.hotel.bean.Room;
+import by.chmut.hotel.bean.User;
 import by.chmut.hotel.dao.DAOFactory;
 import by.chmut.hotel.dao.ReservationDao;
 import by.chmut.hotel.bean.Reservation;
@@ -8,6 +10,8 @@ import by.chmut.hotel.service.ServiceException;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ReservationServiceImpl extends AbstractService implements ReservationService {
@@ -74,6 +78,22 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public List<Room> getPaidRoomsIfUserHasThem(User user) throws SQLException {
+        List<Reservation> lastReservations = reservationDao.getByUserId(user.getId());
+        if (lastReservations.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<Room> result = new ArrayList<>();
+        for (Reservation reservation : lastReservations) {
+            Room room = factory.getRoomDao().get(reservation.getRoomId());
+            room.setCheckIn(reservation.getCheckIn());
+            room.setCheckOut(reservation.getCheckOut());
+            result.add(room);
+        }
+        return result;
     }
 
 
