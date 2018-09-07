@@ -3,7 +3,9 @@ package by.chmut.hotel.controller.command.impl;
 import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.controller.command.Command;
 import by.chmut.hotel.service.RoomService;
+import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +35,12 @@ public class SearchCommand implements Command {
         int bedTypeInt;
         List<Room> rooms = new ArrayList<>();
         if (bedType == null||checkIn==null||checkOut==null) {
-            rooms = roomService.getAllRoom();
+            try {
+                rooms = roomService.getAllRoom();
+            } catch (ServiceException e) {
+                Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+                logger.error(e.getMessage(),e);
+            }
         } else {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             checkInDate = LocalDate.parse(checkIn,formatter);
@@ -41,8 +48,13 @@ public class SearchCommand implements Command {
             bedTypeInt = Integer.parseInt(bedType);
             req.getSession().setAttribute("checkIn",checkInDate);
             req.getSession().setAttribute("checkOut",checkOutDate);
-            rooms = roomService.getRoomOnDateAndBedType(bedTypeInt,
-                    checkInDate, checkOutDate);
+            try {
+                rooms = roomService.getRoomByDateAndBedType(bedTypeInt,
+                        checkInDate, checkOutDate);
+            } catch (ServiceException e) {
+                Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+                logger.error(e.getMessage(),e);
+            }
         }
         req.getSession().setAttribute("rooms", rooms);
         req.getRequestDispatcher(MAIN_PAGE).forward(req,resp);

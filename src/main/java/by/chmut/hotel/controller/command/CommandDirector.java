@@ -3,15 +3,25 @@ package by.chmut.hotel.controller.command;
 import by.chmut.hotel.controller.command.impl.*;
 
 public enum CommandDirector {
+
     HOME("Home", "pages/main.jspx", new DefaultCommand()),
+
     LOGIN("Login", "",  new LoginCommand()),
+
     LOGOUT("Logout", "", new LogoutCommand()),
+
     SEARCH("Search", "pages/search.jspx", new SearchCommand()),
+
     ADD_ACCOUNT("Add_account", "pages/autorization.jspx", new AddAccountCommand()),
+
     CREATE_USER("Create_user","", new CreateUserCommand()),
+
     RESERVATION("Reservation", "pages/reservation.jspx", new ReservationCommand()),
+
     PAYMENT("Payment", "pages/payment.jspx", new PaymentCommand()),
+
     ADMIN("Administration", "pages/administration.jspx", new AdminCommand()),
+
     SETROOMID("SetRoomId", "", new SetRoomIdCommand());
 
     private String pageName;
@@ -25,7 +35,9 @@ public enum CommandDirector {
     }
 
     public static CommandDirector selectCommand(String pageName) {
+
         for (CommandDirector type : CommandDirector.values()) {
+
             if (type.pageName.equalsIgnoreCase(pageName)) {
                 return type;
             }
@@ -36,7 +48,6 @@ public enum CommandDirector {
     public String getPageName() {
         return pageName;
     }
-
 
     public String getPagePath() {
         return pagePath;

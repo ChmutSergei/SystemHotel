@@ -9,8 +9,11 @@ public class DAOFactory {
     private static final DAOFactory INSTANCE = new DAOFactory();
 
     private final ReservationDao reservationDao = new ReservationDaoImpl();
+
     private final RoomDao roomDao = new RoomDaoImpl();
+
     private final UserDao userDao = new UserDaoImpl();
+
     private final RoomDtoImpl clientDto = new RoomDtoImpl();
 
     public ReservationDao getReservationDao() {

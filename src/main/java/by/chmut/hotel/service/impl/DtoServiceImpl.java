@@ -1,11 +1,13 @@
 package by.chmut.hotel.service.impl;
 
 import by.chmut.hotel.bean.dto.RoomDto;
+import by.chmut.hotel.dao.DAOException;
 import by.chmut.hotel.dao.DAOFactory;
 import by.chmut.hotel.service.DtoService;
+import by.chmut.hotel.service.ServiceException;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class DtoServiceImpl extends AbstractService implements DtoService {
@@ -13,16 +15,18 @@ public class DtoServiceImpl extends AbstractService implements DtoService {
     private DAOFactory factory = DAOFactory.getInstance();
 
     @Override
-    public List<RoomDto> getRoomWithCheckInOrDepartureForThisDay(LocalDate date) {
+    public List<RoomDto> getRoomWithCheckInOrDepartureForThisDay(LocalDate date) throws ServiceException {
+
+        List<RoomDto> result = Collections.emptyList();
+
         try {
             startTransaction();
-            List<RoomDto> result = factory.getClientDto().getRoomWithCheckInOrDepartureForThisDay(date);
+            result = factory.getClientDto().getAllRoomsWhereCheckInOrCheckOutEqualsDate(date);
             commit();
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (DAOException e) {
+            throw new ServiceException(e.getMessage(),e);
         }
-        return null;
 
+        return result;
     }
 }

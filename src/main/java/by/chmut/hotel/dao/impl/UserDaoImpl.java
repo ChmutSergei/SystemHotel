@@ -1,6 +1,7 @@
 package by.chmut.hotel.dao.impl;
 
 import by.chmut.hotel.dao.AbstractDao;
+import by.chmut.hotel.dao.DAOException;
 import by.chmut.hotel.dao.UserDao;
 import by.chmut.hotel.bean.User;
 
@@ -23,103 +24,123 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String updateUser = "UPDATE Contacts SET email=?, telephone=?, country=?, city=?, address=?, zip=? WHERE id=?";
     private static final String deleteUser = "DELETE FROM Users WHERE id=?";
 
-    public User getUserByLogin(String login) throws SQLException {
-        PreparedStatement ps = prepareStatement(selectUserByLogin);
-        ps.setString(1,login);
-        ResultSet rs = ps.executeQuery();
-        User user = new User();
-        while (rs.next()) {
-            user.setId(rs.getInt(1));
-            user.setLogin(rs.getString(2));
-            user.setPassword(rs.getString(3));
-            user.setName(rs.getString(4));
-            user.setLastName(rs.getString(5));
-            user.setRole(rs.getString(6));
+    public User getUserByLogin(String login) throws DAOException {
+        try {
+            PreparedStatement ps = prepareStatement(selectUserByLogin);
+            ps.setString(1, login);
+            ResultSet rs = ps.executeQuery();
+            User user = new User();
+            while (rs.next()) {
+                user.setId(rs.getInt(1));
+                user.setLogin(rs.getString(2));
+                user.setPassword(rs.getString(3));
+                user.setName(rs.getString(4));
+                user.setLastName(rs.getString(5));
+                user.setRole(rs.getString(6));
+            }
+            return user;
+        } catch (SQLException e) {
+            throw new DAOException("Do not get User by login", e);
         }
-        return user;
     }
 
     @Override
-    public User save(User user) throws SQLException {
-        PreparedStatement psSave1 = prepareStatement(addContact,Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement psSave2 = prepareStatement(addUser,Statement.RETURN_GENERATED_KEYS);
-        psSave1.setString(1,user.getEmail());
-        psSave1.setString(2,user.getTelephone());
-        psSave1.setString(3,user.getCountry());
-        psSave1.setString(4,user.getCity());
-        psSave1.setString(5,user.getAddress());
-        psSave1.setString(6,user.getZip());
-        psSave1.executeUpdate();
-        ResultSet rs = psSave1.getGeneratedKeys();
-        Integer contactId = 0;
-        if (rs.next()) {
-            contactId = (rs.getInt(1));
+    public User save(User user) throws DAOException {
+        try {
+            PreparedStatement psContact = prepareStatement(addContact, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement psMainPart = prepareStatement(addUser, Statement.RETURN_GENERATED_KEYS);
+            psContact.setString(1, user.getEmail());
+            psContact.setString(2, user.getTelephone());
+            psContact.setString(3, user.getCountry());
+            psContact.setString(4, user.getCity());
+            psContact.setString(5, user.getAddress());
+            psContact.setString(6, user.getZip());
+            psContact.executeUpdate();
+            ResultSet rs = psContact.getGeneratedKeys();
+            Integer contactId = 0;
+            if (rs.next()) {
+                contactId = (rs.getInt(1));
+            }
+            close(rs);
+            psMainPart.setString(1, user.getLogin());
+            psMainPart.setString(2, user.getPassword());
+            psMainPart.setString(3, user.getName());
+            psMainPart.setString(4, user.getLastName());
+            psMainPart.setString(5, user.getRole());
+            psMainPart.setInt(6, contactId);
+            psMainPart.executeUpdate();
+            rs = psMainPart.getGeneratedKeys();
+            if (rs.next()) {
+                user.setId(rs.getInt(1));
+            }
+            close(rs);
+            return user;
+        } catch (SQLException e) {
+            throw new DAOException("Do not save User", e);
         }
-        close(rs);
-        psSave2.setString(1,user.getLogin());
-        psSave2.setString(2,user.getPassword());
-        psSave2.setString(3,user.getName());
-        psSave2.setString(4,user.getLastName());
-        psSave2.setString(5,user.getRole());
-        psSave2.setInt(6,contactId);
-        psSave2.executeUpdate();
-        rs = psSave2.getGeneratedKeys();
-        if (rs.next()) {
-            user.setId(rs.getInt(1));
-        }
-        close(rs);
-        return user;
     }
 
     @Override
-    public User get(Serializable id) throws SQLException {
-        PreparedStatement psGet = prepareStatement(selectUserById);
-        psGet.setInt(1, (int)id);
-        ResultSet rs = psGet.executeQuery();
-        User user = new User();
-        while (rs.next()) {
-            user.setId(rs.getInt(1));
-            user.setLogin(rs.getString(2));
-            user.setPassword(rs.getString(3));
-            user.setName(rs.getString(4));
-            user.setLastName(rs.getString(5));
-            user.setRole(rs.getString(6));
-            user.setEmail(rs.getString(7));
-            user.setTelephone(rs.getString(8));
-            user.setCountry(rs.getString(9));
-            user.setCity(rs.getString(10));
-            user.setAddress(rs.getString(11));
-            user.setZip(rs.getString(12));
+    public User get(Serializable id) throws DAOException {
+        try {
+            PreparedStatement psGet = prepareStatement(selectUserById);
+            psGet.setInt(1, (int) id);
+            ResultSet rs = psGet.executeQuery();
+            User user = new User();
+            while (rs.next()) {
+                user.setId(rs.getInt(1));
+                user.setLogin(rs.getString(2));
+                user.setPassword(rs.getString(3));
+                user.setName(rs.getString(4));
+                user.setLastName(rs.getString(5));
+                user.setRole(rs.getString(6));
+                user.setEmail(rs.getString(7));
+                user.setTelephone(rs.getString(8));
+                user.setCountry(rs.getString(9));
+                user.setCity(rs.getString(10));
+                user.setAddress(rs.getString(11));
+                user.setZip(rs.getString(12));
+            }
+            return user;
+        } catch (SQLException e) {
+            throw new DAOException("Do not get User", e);
         }
-        return user;
     }
 
     @Override
-    public void update(User user) throws SQLException {
-        PreparedStatement psUpdate1 = prepareStatement(getContactID);
-        PreparedStatement psUpdate2 = prepareStatement(updateUser);
-        psUpdate1.setInt(1,user.getId());
-        ResultSet rs = psUpdate1.executeQuery();
-        Integer contactId = 0;
-        if (rs.next()) {
-            contactId = (rs.getInt(1));
+    public void update(User user) throws DAOException {
+        try {
+            PreparedStatement psUpdate1 = prepareStatement(getContactID);
+            PreparedStatement psUpdate2 = prepareStatement(updateUser);
+            psUpdate1.setInt(1, user.getId());
+            ResultSet rs = psUpdate1.executeQuery();
+            Integer contactId = 0;
+            if (rs.next()) {
+                contactId = (rs.getInt(1));
+            }
+            close(rs);
+            psUpdate2.setInt(7, contactId);
+            psUpdate2.setString(1, user.getEmail());
+            psUpdate2.setString(2, user.getTelephone());
+            psUpdate2.setString(3, user.getCountry());
+            psUpdate2.setString(4, user.getCity());
+            psUpdate2.setString(5, user.getAddress());
+            psUpdate2.setString(6, user.getZip());
+            psUpdate2.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Do not update User", e);
         }
-        close(rs);
-        psUpdate2.setInt(7,contactId);
-        psUpdate2.setString(1,user.getEmail());
-        psUpdate2.setString(2,user.getTelephone());
-        psUpdate2.setString(3,user.getCountry());
-        psUpdate2.setString(4,user.getCity());
-        psUpdate2.setString(5,user.getAddress());
-        psUpdate2.setString(6,user.getZip());
-        psUpdate2.executeUpdate();
     }
 
     @Override
-    public int delete(Serializable id) throws SQLException {
-        PreparedStatement psDelete = prepareStatement(deleteUser);
-        psDelete.setInt(1,(int)id);
-        return psDelete.executeUpdate();
+    public int delete(Serializable id) throws DAOException {
+        try {
+            PreparedStatement psDelete = prepareStatement(deleteUser);
+            psDelete.setInt(1, (int) id);
+            return psDelete.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Do not delete User", e);
+        }
     }
 
 

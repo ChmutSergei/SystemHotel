@@ -2,7 +2,9 @@ package by.chmut.hotel.controller.command.impl;
 
 import by.chmut.hotel.controller.command.Command;
 import by.chmut.hotel.service.RoomService;
+import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
+import org.apache.log4j.Logger;
 
 
 import javax.servlet.ServletException;
@@ -19,8 +21,12 @@ public class DefaultCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getSession().setAttribute("rooms", roomService.getAllRoom());
-
+        try {
+            req.getSession().setAttribute("rooms", roomService.getAllRoom());
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(),e);
+        }
         req.getRequestDispatcher(MAIN_PAGE).forward(req,resp);
 
     }

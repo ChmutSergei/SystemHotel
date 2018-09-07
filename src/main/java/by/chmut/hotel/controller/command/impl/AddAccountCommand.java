@@ -13,11 +13,16 @@ public class AddAccountCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
         if (req.getSession().getAttribute("user") == null) {
+
             req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
+
             req.getSession().setAttribute("errorMsg", "");
         } else {
+
             String contextPath = req.getContextPath();
+
             resp.sendRedirect(contextPath + "/frontController?pageName=reservation");
         }
     }

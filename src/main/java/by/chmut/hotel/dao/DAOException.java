@@ -1,6 +1,7 @@
 package by.chmut.hotel.dao;
 
 public class DAOException extends Exception {
+
     private static final long serialVersionUID = -3760861607605184650L;
 
     public DAOException() {

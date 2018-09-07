@@ -2,6 +2,7 @@ package by.chmut.hotel.dao.impl;
 
 import by.chmut.hotel.bean.dto.RoomDto;
 import by.chmut.hotel.dao.AbstractDao;
+import by.chmut.hotel.dao.DAOException;
 import by.chmut.hotel.dao.Dto;
 
 import java.sql.PreparedStatement;
@@ -17,29 +18,37 @@ public class RoomDtoImpl extends AbstractDao implements Dto {
             "Reservation JOIN Users U on user_id = U.id JOIN Rooms R on room_id = R.id JOIN Contacts C on U.contact_id = C.id " +
             "WHERE  checkIn=? OR checkOut=?";
 
-    public List<RoomDto> getRoomWithCheckInOrDepartureForThisDay(LocalDate date) throws SQLException {
+    public List<RoomDto> getAllRoomsWhereCheckInOrCheckOutEqualsDate(LocalDate date) throws DAOException {
         List<RoomDto> list = new ArrayList<>();
-        PreparedStatement psSearchRoom = prepareStatement(selectData);
-        psSearchRoom.setDate(1,java.sql.Date.valueOf(date));
-        psSearchRoom.setDate(2,java.sql.Date.valueOf(date));
-        ResultSet rs = psSearchRoom.executeQuery();
-        while (rs.next()) {
-            list.add(setDtoFromResultSet(rs));
+        try {
+            PreparedStatement psSearchRoom = prepareStatement(selectData);
+            psSearchRoom.setDate(1, java.sql.Date.valueOf(date));
+            psSearchRoom.setDate(2, java.sql.Date.valueOf(date));
+            ResultSet rs = psSearchRoom.executeQuery();
+            while (rs.next()) {
+                list.add(setDtoFromResultSet(rs));
+            }
+            close(rs);
+        } catch (SQLException e) {
+            throw new DAOException("Do not get Rooms by check in or check out equals date",e);
         }
-        close(rs);
         return list;
     }
-    private RoomDto setDtoFromResultSet(ResultSet rs) throws SQLException {
-        RoomDto data = new RoomDto();
-        data.setRoomNumber(rs.getInt(1));
-        data.setBedType(rs.getInt(2));
-        data.setCheckIn(rs.getDate(3).toLocalDate());
-        data.setCheckOut(rs.getDate(4).toLocalDate());
-        data.setName(rs.getString(5));
-        data.setLastname(rs.getString(6));
-        data.setTelephone(rs.getString(7));
-        data.setCity(rs.getString(8));
-        data.setPrice(rs.getDouble(9));
-        return data;
+    private RoomDto setDtoFromResultSet(ResultSet rs) throws DAOException {
+        RoomDto result = new RoomDto();
+        try {
+            result.setRoomNumber(rs.getInt(1));
+            result.setBedType(rs.getInt(2));
+            result.setCheckIn(rs.getDate(3).toLocalDate());
+            result.setCheckOut(rs.getDate(4).toLocalDate());
+            result.setName(rs.getString(5));
+            result.setLastname(rs.getString(6));
+            result.setTelephone(rs.getString(7));
+            result.setCity(rs.getString(8));
+            result.setPrice(rs.getDouble(9));
+        } catch (SQLException e) {
+            throw new DAOException("Do not set from ResultSet", e);
+        }
+        return result;
     }
 }

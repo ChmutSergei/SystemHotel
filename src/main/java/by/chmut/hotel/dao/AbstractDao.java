@@ -8,20 +8,30 @@ import java.sql.SQLException;
 
 public abstract class AbstractDao {
 
-    protected PreparedStatement prepareStatement(String query) throws SQLException {
-        return ConnectionManager.getConnection().prepareStatement(query);
+    protected PreparedStatement prepareStatement(String query) throws DAOException {
+
+        try {
+            return ConnectionManager.getConnection().prepareStatement(query);
+        } catch (SQLException e) {
+            throw new DAOException("Error with get Connection",e);
+        }
     }
 
-    protected PreparedStatement prepareStatement(String query, int returnKey) throws SQLException {
-        return ConnectionManager.getConnection().prepareStatement(query, returnKey);
+    protected PreparedStatement prepareStatement(String query, int returnKey) throws DAOException {
+
+        try {
+            return ConnectionManager.getConnection().prepareStatement(query, returnKey);
+        } catch (SQLException e) {
+            throw new DAOException("Error with get Connection",e);
+        }
     }
 
-    protected void close(ResultSet rs) {
+    protected void close(ResultSet rs) throws DAOException {
         try {
             if (rs != null)
                 rs.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("Do not close rs",e);
         }
     }
 }

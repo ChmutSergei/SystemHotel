@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface RoomService {
 
-    Room save(Room room);
+    Room save(Room room) throws ServiceException;
 
-    Room get(Serializable id);
+    Room get(Serializable id) throws ServiceException;
 
-    void update(Room room);
+    void update(Room room) throws ServiceException;
 
-    int delete(Serializable id);
+    int delete(Serializable id) throws ServiceException;
 
-    List<Room> getRoomOnDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut);
+    List<Room> getRoomByDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut) throws ServiceException;
 
-    List<Room> getAllRoom();
+    List<Room> getAllRoom() throws ServiceException;
 }

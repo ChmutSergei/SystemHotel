@@ -1,5 +1,7 @@
 package by.chmut.hotel.dao.database;
 
+import by.chmut.hotel.dao.DAOException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,7 +31,7 @@ public class ConnectionPool {
             USER = "UNDEFINED";
             PASSWORD = "UNDEFINED";
             DRIVER = "com.mysql.jdbc.Driver";
-            System.out.println("Бандл для db не был инициализирован");
+            new DAOException("Bundle for Connection Pool is not initialization");
         } else {
             URL = rb.getString("url");
             USER = rb.getString("user");
@@ -37,17 +39,21 @@ public class ConnectionPool {
             DRIVER = rb.getString("driver");
         }
     }
-    public ConnectionPool(int maxConnections) {
-//        this.bundleName = bundleName;
+    public ConnectionPool(int maxConnections) throws DAOException {
+
         this.maxConnections = maxConnections;
+
         countOffline = maxConnections;
+
         initConnectionPool();
     }
 
-    private void initConnectionPool() {
+    private void initConnectionPool() throws DAOException {
+
         while (!isConnectionPoolFull()) {
             connectionPool.add(simpleConnection());
         }
+
     }
 
 
@@ -58,20 +64,26 @@ public class ConnectionPool {
         return true;
     }
 
-    private Connection simpleConnection() {
+    private Connection simpleConnection() throws DAOException {
         try {
             Class.forName(DRIVER);
+
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
             countOnline += 1;
+
             countOffline -= 1;
+
             return connection;
-        } catch(SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+
+        } catch(SQLException e) {
+            throw new DAOException("Error with get Connection", e);
+        } catch (ClassNotFoundException e) {
+            throw new DAOException("Error with get Connection - driver not found",e);
         }
-        return null;
     }
 
-    public synchronized Connection getConnection() {
+    public synchronized Connection getConnection() throws DAOException {
         Connection connection = null;
 
         do {
@@ -82,7 +94,7 @@ public class ConnectionPool {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    throw new DAOException("Error with get Connection from Pool",e);
                 }
             }
         } while (connection == null);
@@ -92,21 +104,27 @@ public class ConnectionPool {
         return connection;
     }
 
-    private synchronized void checkCountConnectionInPoolOnMinimum() {
+    private synchronized void checkCountConnectionInPoolOnMinimum() throws DAOException {
+
         if (connectionPool.size()<maxConnections) {
+
             while ((connectionPool.size()<MIN_CONNECTIONS) && (countOffline>0)) {
+
                 Connection connection = simpleConnection();
+
                 connectionPool.add(connection);
             }
         }
     }
 
-    public void returnConnection(Connection connection) {
+    public void returnConnection(Connection connection) throws DAOException {
+
         connectionPool.add(connection);
+
         checkAndCloseUnusedConnection();
     }
 
-    private synchronized void checkAndCloseUnusedConnection() {
+    private synchronized void checkAndCloseUnusedConnection() throws DAOException {
         if (connectionPool.size() > maxConnections) {
             while (connectionPool.size() > maxConnections) {
                 try {
@@ -117,7 +135,7 @@ public class ConnectionPool {
                     countOnline += 1;
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    throw new DAOException("Error with close Connection",e);
                 }
             }
         }

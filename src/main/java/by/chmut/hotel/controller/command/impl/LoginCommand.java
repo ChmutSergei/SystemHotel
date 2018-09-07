@@ -3,8 +3,10 @@ package by.chmut.hotel.controller.command.impl;
 import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
 import by.chmut.hotel.controller.command.encoder.Encoder;
+import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
 import by.chmut.hotel.service.UserService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,7 +29,13 @@ public class LoginCommand implements Command {
             dispatcher.forward(req, resp);
             return;
         }
-        User user = userService.getUserByLogin(login);
+        User user = null;
+        try {
+            user = userService.getUserByLogin(login);
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(),e);
+        }
         String contextPath = req.getContextPath();
         if (user != null && user.getPassword().equals(Encoder.encode(password))) {
             req.getSession().setAttribute("user", user);

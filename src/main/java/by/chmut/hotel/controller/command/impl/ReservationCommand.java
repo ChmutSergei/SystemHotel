@@ -6,7 +6,9 @@ import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
 import by.chmut.hotel.service.ReservationService;
 import by.chmut.hotel.service.RoomService;
+import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +37,10 @@ public class ReservationCommand implements Command {
         User user = (User) session.getAttribute("user");
 
         // search - if user user has paid reservation - set to session for view
-        setPaidRoomsInSession(session, user);
+        setPaidRoomsInSession(req, user);
 
         if (roomId != null) {
-            Room room = getRoomById(session, roomId);
+            Room room = getRoomById(req, roomId);
 
             if (req.getParameter("delete") == null) {
                 // Add room
@@ -61,23 +63,26 @@ public class ReservationCommand implements Command {
 
     }
 
-    private void setPaidRoomsInSession(HttpSession session,User user) {
+    private void setPaidRoomsInSession(HttpServletRequest req,User user) {
         try {
-            session.setAttribute("paidRooms", factory.getReservationService().getPaidRoomsIfUserHasThem(user));
-        } catch (SQLException e) {
-            e.printStackTrace();
+            req.getSession().setAttribute("paidRooms", factory.getReservationService().getPaidRoomsIfUserHasThem(user));
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(),e);
         }
     }
 
 
-    private Room getRoomById(HttpSession session, Integer roomId) {
-
-        Room result = factory.getRoomService().get(roomId);
-
-        result.setCheckIn((LocalDate) session.getAttribute("checkIn"));
-
-        result.setCheckOut((LocalDate) session.getAttribute("checkOut"));
-
+    private Room getRoomById(HttpServletRequest req, Integer roomId) {
+        Room result = new Room();
+        try{
+            result = factory.getRoomService().get(roomId);
+            result.setCheckIn((LocalDate) req.getSession().getAttribute("checkIn"));
+            result.setCheckOut((LocalDate)  req.getSession().getAttribute("checkOut"));
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(),e);
+        }
         return result;
     }
 

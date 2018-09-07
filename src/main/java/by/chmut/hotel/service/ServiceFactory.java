@@ -10,8 +10,11 @@ public class ServiceFactory {
     private static final ServiceFactory INSTANCE = new ServiceFactory();
 
     private final UserService userService= new UserServiceImpl();
+
     private final RoomService roomService = new RoomServiceImpl();
+
     private final ReservationService reservationService = new ReservationServiceImpl();
+
     private final DtoService dtoService = new DtoServiceImpl();
 
     private ServiceFactory() {}
