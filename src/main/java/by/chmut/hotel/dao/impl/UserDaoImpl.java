@@ -40,7 +40,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             }
             return user;
         } catch (SQLException e) {
-            throw new DAOException("Do not get User by login", e);
+            throw new DAOException("Error with get User by login", e);
         }
     }
 
@@ -76,7 +76,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             close(rs);
             return user;
         } catch (SQLException e) {
-            throw new DAOException("Do not save User", e);
+            throw new DAOException("Error with save User", e);
         }
     }
 
@@ -103,7 +103,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             }
             return user;
         } catch (SQLException e) {
-            throw new DAOException("Do not get User", e);
+            throw new DAOException("Error with get User", e);
         }
     }
 
@@ -128,7 +128,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             psUpdate2.setString(6, user.getZip());
             psUpdate2.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not update User", e);
+            throw new DAOException("Error with update User", e);
         }
     }
 
@@ -139,7 +139,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             psDelete.setInt(1, (int) id);
             return psDelete.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not delete User", e);
+            throw new DAOException("Error with delete User", e);
         }
     }
 

@@ -1,4 +1,4 @@
-package by.chmut.hotel.controller.command;
+package by.chmut.hotel.controller.command.log4j;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;

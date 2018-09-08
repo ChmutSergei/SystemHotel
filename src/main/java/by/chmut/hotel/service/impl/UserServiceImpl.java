@@ -21,7 +21,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             commit();
             return user;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -42,7 +42,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
             }
             return user;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 

@@ -13,7 +13,7 @@ public abstract class AbstractDao {
         try {
             return ConnectionManager.getConnection().prepareStatement(query);
         } catch (SQLException e) {
-            throw new DAOException("Error with get Connection",e);
+            throw new DAOException("Error with PreparedStatement",e);
         }
     }
 
@@ -22,7 +22,7 @@ public abstract class AbstractDao {
         try {
             return ConnectionManager.getConnection().prepareStatement(query, returnKey);
         } catch (SQLException e) {
-            throw new DAOException("Error with get Connection",e);
+            throw new DAOException("Error with PreparedStatement",e);
         }
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractDao {
             if (rs != null)
                 rs.close();
         } catch (SQLException e) {
-            throw new DAOException("Do not close rs",e);
+            throw new DAOException("Error with close ResultSet",e);
         }
     }
 }

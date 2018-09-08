@@ -22,7 +22,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             room = roomDao.save(room);
             commit();
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
         return room;
     }
@@ -35,7 +35,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             commit();
             return room;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -46,7 +46,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             roomDao.update(room);
             commit();
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -58,7 +58,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             commit();
             return rows;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -70,7 +70,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             commit();
             return room;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -82,7 +82,7 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
             commit();
             return room;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 

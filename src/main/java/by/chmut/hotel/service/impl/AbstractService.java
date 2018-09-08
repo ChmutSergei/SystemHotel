@@ -15,7 +15,7 @@ public abstract class AbstractService {
         } catch (SQLException e) {
             throw new ServiceException("Error with start transaction", e);
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -25,7 +25,7 @@ public abstract class AbstractService {
         } catch (SQLException e) {
             throw new ServiceException("Error with commit transaction", e);
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
     public void rollback() throws ServiceException {
@@ -34,7 +34,7 @@ public abstract class AbstractService {
         } catch (SQLException e) {
             throw new ServiceException("Error with roolback transaction", e);
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 

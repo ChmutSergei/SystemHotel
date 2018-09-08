@@ -24,7 +24,7 @@ public class DtoServiceImpl extends AbstractService implements DtoService {
             result = factory.getClientDto().getAllRoomsWhereCheckInOrCheckOutEqualsDate(date);
             commit();
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
 
         return result;

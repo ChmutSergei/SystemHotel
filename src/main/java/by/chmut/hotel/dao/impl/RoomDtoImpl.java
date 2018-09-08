@@ -30,7 +30,7 @@ public class RoomDtoImpl extends AbstractDao implements Dto {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not get Rooms by check in or check out equals date",e);
+            throw new DAOException("Error with get Rooms by check in or check out equals date",e);
         }
         return list;
     }
@@ -47,7 +47,7 @@ public class RoomDtoImpl extends AbstractDao implements Dto {
             result.setCity(rs.getString(8));
             result.setPrice(rs.getDouble(9));
         } catch (SQLException e) {
-            throw new DAOException("Do not set from ResultSet", e);
+            throw new DAOException("Error with set from ResultSet", e);
         }
         return result;
     }

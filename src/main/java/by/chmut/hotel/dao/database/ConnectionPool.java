@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 
 public class ConnectionPool {
 
+    private static ConnectionPool INSTANCE;
+
     private List<Connection> connectionPool = new ArrayList<Connection>();
     private static final int MIN_CONNECTIONS = 5;
     private final int  maxConnections;
@@ -31,7 +33,6 @@ public class ConnectionPool {
             USER = "UNDEFINED";
             PASSWORD = "UNDEFINED";
             DRIVER = "com.mysql.jdbc.Driver";
-            new DAOException("Bundle for Connection Pool is not initialization");
         } else {
             URL = rb.getString("url");
             USER = rb.getString("user");
@@ -39,7 +40,7 @@ public class ConnectionPool {
             DRIVER = rb.getString("driver");
         }
     }
-    public ConnectionPool(int maxConnections) throws DAOException {
+    private ConnectionPool(int maxConnections) throws DAOException {
 
         this.maxConnections = maxConnections;
 
@@ -80,6 +81,15 @@ public class ConnectionPool {
             throw new DAOException("Error with get Connection", e);
         } catch (ClassNotFoundException e) {
             throw new DAOException("Error with get Connection - driver not found",e);
+        }
+    }
+
+    public static synchronized ConnectionPool getInstance(int maxConnections) throws DAOException {
+        if (INSTANCE == null) {
+            INSTANCE = new ConnectionPool(maxConnections);
+            return INSTANCE;
+        } else {
+            return INSTANCE;
         }
     }
 

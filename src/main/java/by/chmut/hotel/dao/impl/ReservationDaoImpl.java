@@ -34,7 +34,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             reservation.setCheckOut(rs.getDate(5).toLocalDate());
             reservation.setDate(rs.getDate(6).toLocalDate());
         } catch (SQLException e) {
-            throw new DAOException("Do not set params from ResultSet",e);
+            throw new DAOException("Error with set params from ResultSet",e);
         }
         return reservation;
     }
@@ -51,7 +51,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not get Reservation by UserID",e);
+            throw new DAOException("Error with get Reservation by UserID",e);
         }
         return list;
     }
@@ -72,7 +72,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             close(rs);
             reservation.setDate(LocalDate.now());
         } catch (SQLException e) {
-            throw new DAOException("Do not save Reservation",e);
+            throw new DAOException("Error with save Reservation",e);
         }
         return reservation;
     }
@@ -87,7 +87,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
                 return setFromResultSet(rs);
             }
         } catch (SQLException e) {
-            throw new DAOException("Do not get Reservation by ID",e);
+            throw new DAOException("Error with get Reservation by ID",e);
         }
         return new Reservation();
     }
@@ -101,7 +101,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             psUpdateReservation.setInt(1, reservation.getRoomId());
             psUpdateReservation.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not update Reservation",e);
+            throw new DAOException("Error with update Reservation",e);
         }
 
     }
@@ -113,7 +113,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             psDelete.setInt(1, (int) id);
             return psDelete.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not delete Reservation", e);
+            throw new DAOException("Error with delete Reservation", e);
         }
     }
 

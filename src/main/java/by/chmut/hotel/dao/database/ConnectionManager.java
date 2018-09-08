@@ -7,20 +7,7 @@ import java.sql.Connection;
 
 public class ConnectionManager {
 
-    private static ConnectionPool INSTANCE;
-
-    static {
-
-        try {
-
-            INSTANCE = new ConnectionPool( 20);
-
-        } catch (DAOException e) {
-
-            new DAOException("Error with Connection Pool - ",e);
-
-        }
-    }
+    private static final int MAX_CONNECTIONS = 20;
 
     private static ThreadLocal<Connection> tl = new ThreadLocal<>();
 
@@ -28,7 +15,7 @@ public class ConnectionManager {
 
             if (tl.get() == null) {
 
-                tl.set(INSTANCE.getConnection());
+                tl.set(ConnectionPool.getInstance(MAX_CONNECTIONS).getConnection());
 
             }
 

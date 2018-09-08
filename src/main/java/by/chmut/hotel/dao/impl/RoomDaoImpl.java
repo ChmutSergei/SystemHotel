@@ -38,7 +38,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             room.setPrice(rs.getLong(5));
             room.setDescription(rs.getString(6));
         } catch (SQLException e) {
-            throw new DAOException("Do not set from ResultSet",e);
+            throw new DAOException("Error with set from ResultSet",e);
         }
         return room;
     }
@@ -52,7 +52,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not get all Rooms",e);
+            throw new DAOException("Error with get all Rooms",e);
         }
         return list;
     }
@@ -69,7 +69,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not get Room by date and bedType",e);
+            throw new DAOException("Error with get Room by date and bedType",e);
         }
         return list;
     }
@@ -90,7 +90,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not save Room", e);
+            throw new DAOException("Error with save Room", e);
         }
         return room;
     }
@@ -107,7 +107,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Do not get Room by Id",e);
+            throw new DAOException("Error with get Room by Id",e);
         }
         return room;
     }
@@ -123,7 +123,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             psUpdate.setString(4, room.getDescription());
             psUpdate.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not update Room",e);
+            throw new DAOException("Error with update Room",e);
         }
     }
 
@@ -134,7 +134,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             psDelete.setInt(1, (int) id);
             return psDelete.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException("Do not delete Room",e);
+            throw new DAOException("Error with delete Room",e);
         }
     }
 

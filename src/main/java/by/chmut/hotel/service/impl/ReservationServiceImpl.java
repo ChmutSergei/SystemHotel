@@ -28,7 +28,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             reservation = reservationDao.save(reservation);
             commit();
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
         return reservation;
     }
@@ -41,7 +41,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             commit();
             return reservation;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -52,7 +52,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             reservationDao.update(reservation);
             commit();
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -64,7 +64,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             commit();
             return rows;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -76,7 +76,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             commit();
             return reservations;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             }
             return result;
         } catch (DAOException e) {
-            throw new ServiceException(e.getMessage(),e);
+            throw new ServiceException(e);
         }
     }
 
