@@ -17,7 +17,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/assests/js/moment-with-locales.min.js"></script>
     <script src="${pageContext.request.contextPath}/assests/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="${pageContext.request.contextPath}/assests/js/utils.js" type="text/javascript"><jsp:text/></script>
     <script src="${pageContext.request.contextPath}/assests/js/jquery.payform.min.js" charset="utf-8"></script>
     <script src="${pageContext.request.contextPath}/assests/js/script.js"></script>
   ]]>
@@ -53,6 +52,10 @@
             modal.style.display = "none";
         }
     }
+
 </script>
+<![CDATA[
+        <script src="${pageContext.request.contextPath}/assests/js/utils.js" type="text/javascript"><jsp:text/></script>
+    ]]>
 </body>
 </html>

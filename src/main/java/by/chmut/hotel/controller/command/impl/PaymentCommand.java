@@ -4,6 +4,7 @@ import by.chmut.hotel.bean.Reservation;
 import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
+import by.chmut.hotel.controller.command.validation.PaymentSender;
 import by.chmut.hotel.service.ReservationService;
 import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
@@ -29,27 +30,27 @@ public class PaymentCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-        List<Room> rooms = (List<Room>) req.getSession().getAttribute("roomTemp");
+        List<Room> temporaryRooms = (List<Room>) req.getSession().getAttribute("tempRooms");
 
         // Create reservation
-        if (("1234567890".equals(req.getParameter("payment")))) {
+        if ("success".equals(req.getParameter("payment"))) {
 
-            createReservation(req, rooms);
+            createReservation(req, temporaryRooms);
 
             removeAttributesAndSetSuccess(req.getSession());
         }
 
-        String numCard = req.getParameter("numCard");
+        // check payment
+        PaymentSender paymentSender = new PaymentSender(req.getParameter("numCard"), req.getParameter("nameCard"),
+                req.getParameter("cvc2"));
 
-        String nameCard = req.getParameter("nameCard");
+        String request = paymentSender.payment();
 
-        String cvc2 = req.getParameter("cvc2");
-
-        if ((numCard!=null)&&(nameCard!=null)&&(cvc2!=null)) {
+        if (request.equals("true")) {
 
             String contextPath = req.getContextPath();
 
-            resp.sendRedirect(contextPath+ "/frontController?pageName=payment&payment=1234567890");
+            resp.sendRedirect(contextPath+ "/frontController?pageName=payment&payment=success");
 
         } else {
 
@@ -75,8 +76,8 @@ public class PaymentCommand implements Command {
             Reservation reservation = new Reservation();
             reservation.setUserId(userId);
             reservation.setRoomId(room.getId());
-            reservation.setCheckIn((LocalDate) session.getAttribute("checkIn"));
-            reservation.setCheckOut((LocalDate) session.getAttribute("checkOut"));
+            reservation.setCheckIn(room.getCheckIn());
+            reservation.setCheckOut(room.getCheckOut());
             reservation.setDate(LocalDate.now());
             try {
                 reservationService.save(reservation);

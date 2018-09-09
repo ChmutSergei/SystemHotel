@@ -20,6 +20,7 @@ public class Room implements Serializable {
     private LocalDate checkIn;
     private LocalDate checkOut;
     private String description;
+    private int temporaryNumber;
 
     public Room(int roomNumber, String type, int bedType, long price, LocalDate checkIn, LocalDate checkOut, String description) {
         this.roomNumber = roomNumber;
@@ -36,6 +37,9 @@ public class Room implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
+        if (id != room.id ) {
+            return false;
+        }
         if (roomNumber != room.roomNumber ) {
             return false;
         }
@@ -43,6 +47,9 @@ public class Room implements Serializable {
             return false;
         }
         if (price != room.price ) {
+            return false;
+        }
+        if (temporaryNumber != room.temporaryNumber ) {
             return false;
         }
         if (type == null) {

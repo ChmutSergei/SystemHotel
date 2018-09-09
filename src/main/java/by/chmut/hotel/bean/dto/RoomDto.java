@@ -24,4 +24,5 @@ public class RoomDto {
     private double price;
 
 
+
 }

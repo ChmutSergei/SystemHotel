@@ -80,7 +80,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="room" items="${roomTemp}" varStatus="status">
+                            <c:forEach var="room" items="${tempRooms}" varStatus="status">
                                 <tr>
                                     <td class="col-xs-1">${status.index+1}</td>
                                     <td class="col-xs-2">${room.type}</td>
@@ -89,7 +89,7 @@
                                     <td class="col-xs-2">${room.checkOut}</td>
                                     <td class="col-xs-1">${room.price/100}</td>
                                     <td class="col-xs-2"><a href="#" class="btn bg-info"><fmt:message bundle="${i18n}" key="reserv.about"/></a></td>
-                                    <td class="col-xs-1"><a id="${room.id}"
+                                    <td class="col-xs-1"><a id="${room.temporaryNumber}"
                                                             href="${pageContext.request.contextPath}/frontController?pageName=reservation&amp;delete=room"
                                                             class="delete"><fmt:message bundle="${i18n}" key="reserv.delete" /></a></td>
                                 </tr>
@@ -130,12 +130,12 @@
         });
 
         function addRoomId(element) {
-            var roomId = $(element).attr('id');
+            var tempNumber = $(element).attr('id');
             var contextUrl = '${pageContext.request.contextPath}';
             $.ajax({
                 type: 'post',
                 url: contextUrl + '/frontController',
-                data: {pageName: 'setRoomId', roomId: roomId}
+                data: {pageName: 'setUniqueNumber', tempNumber: tempNumber}
             });
         }
     </script>

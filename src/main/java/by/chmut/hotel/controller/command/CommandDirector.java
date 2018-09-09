@@ -22,7 +22,9 @@ public enum CommandDirector {
 
     ADMIN("Administration", "pages/administration.jspx", new AdminCommand()),
 
-    SETROOMID("SetRoomId", "", new SetRoomIdCommand());
+    SET_ROOM_ID("SetRoomId", "", new SetRoomIdCommand()),
+
+    SET_UNIQUE_NUMBER("SetUniqueNumber", "", new SetUniqueNumRoomCommand());
 
     private String pageName;
     private String pagePath;

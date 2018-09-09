@@ -13,7 +13,7 @@
 		} 
 
 		today = dd + '.' + mm + '.' + yyyy;
-            // ������������� datetimepicker7 � datetimepicker8
+            // initialization datetimepicker7 and datetimepicker8
             $("#datetimepicker1").datetimepicker({
                 format: 'DD.MM.YYYY'
             });
@@ -47,7 +47,7 @@
 		} 
 
 		today = dd + '.' + mm + '.' + yyyy;
-            // ������������� datetimepicker7 � datetimepicker8
+            // initialization datetimepicker7 and datetimepicker8
             $("#datetimepicker7").datetimepicker({
                 format: 'DD.MM.YYYY'
             });

@@ -73,7 +73,7 @@
 
                             </div>
                             <div class="form-group" >
-                                <c:set var="booking"><fmt:message key="navbar.booknow" bundle="${i18n}"/></c:set>
+                                <c:set var="booking"><fmt:message key="navbar.search" bundle="${i18n}"/></c:set>
                                 <div class="btnbook"  style="margin: 10px !important;">
                                     <input type="submit"  class="checkout col-xs-8 col-xs-offset-2" value="${booking}" />
                                 </div>
@@ -103,19 +103,21 @@
                             </p>
                             <div class="btnlearnmore" style="margin: 10px !important;">
                                 <button class="bnt" onclick="document.getElementById('id02').style.display='block'"
-                                        style="background-color: transparent;color:#c09c76;font-size: 20px"> Learn more
+                                        style="background-color: transparent;color:#c09c76;font-size: 20px"><fmt:message key="rooms.more" bundle="${i18n}"/>
                                 </button>
                                 <c:choose>
                                     <c:when test="${not empty sessionScope.checkIn}">
                                 <a id="${room.id}" class="reservation" role="button"
                                    style="font-size: 25px;color: black;background-color:transparent;text-decoration: none;"
-                                   href="${pageContext.request.contextPath}/frontController?pageName=reservation"> Reservation
+                                   href="${pageContext.request.contextPath}/frontController?pageName=reservation"><fmt:message key="rooms.reserv" bundle="${i18n}"/>
                                 </a>
                                     </c:when>
                                     <c:otherwise>
+                                        <c:set var="warning"><fmt:message key="warning.nodata" bundle="${i18n}"/></c:set>
+                                        <c:set var="warning2"><fmt:message key="warning.datamessage" bundle="${i18n}"/></c:set>
                                         <a id="bnt_reserv2" class="btn" role="button"
                                            style="font-size: 25px;color: black;background-color:transparent"
-                                           href="#" data-toggle="popover" title="Не указаны данные" data-content="Пожалуйста, укажите даты для резервирования"> Reservation
+                                           href="#" data-toggle="popover" title="${warning}" data-content="${warning2}"><fmt:message key="rooms.reserv" bundle="${i18n}"/>
                                         </a>
                                     </c:otherwise>
                                 </c:choose>
@@ -137,65 +139,69 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">ОПИСАНИЕ</h4>
+                    <h4 class="modal-title">ОПИСАНИЕ НОМЕРА</h4>
                 </div>
-                <div class="modal-body">
-                    <p style="font-size: large">Каждый из 102 великолепных номеров отеля располагает мебелью,
+                <div class="modal-body" style="text-align: left">
+                    <p style="font-size: large">    Каждый из 102 великолепных номеров отеля располагает мебелью,
                         и современными технологиями, в том числе бесплатным Wi-Fi и плоскими ЖК-телевизорами с кабельными каналами.
                         Помимо этого, просторные гардеробные и ванные комнаты предоставляют обширное пространство,
                         а эксклюзивные ванные принадлежности Elemis,
                         мягкие халаты и тапочки обеспечат совершенное расслабление.
                         Кроме того, многие номера предлагают неповторимые виды на город.
                         Наши 55 люксов украшены эксклюзивными элементами, включая лампы, зеркала, статуи и картины.
-
-                        ВАННАЯ КОМНАТА
-                        Ванные принадлежности Penhaligon's
-                        Фен
-                        Телефон в ванной комнате
-                        Зеркало для макияжа и бритья
-                        Банные халаты и тапочки
-                        Весы в ванной комнате
-                        ЕДА
-                        Круглосуточная доставка еды в номер
-                        Кофеварка и чайник (по запросу)
-                        Мини-бар (платный)
-                        Бесплатная вода в бутылках
-                        ОПИСАНИЕ НОМЕРА
-                        Кондиционер
-                        Смежные номера (по запросу)
-                        Сейф для ноутбука в номере
-                        Гостиничные номера для некурящих
-                        Гостиничные номера для некурящих
-                        Зеркало в полный рост
-                        ОФИСНОЕ ОБОРУДОВАНИЕ
-                        Телефон
-                        Телефоны для автоматической международной связи
-                        Рабочий стол
-                        Будильник
-                        РАЗВЛЕЧЕНИЯ
-                        Журналы
-                        Спутниковые каналы
-                        Плоский ЖК-телевизор
-                        РАЗНОВИДНОСТИ КРОВАТЕЙ
-                        Ассортимент гипоаллергенных подушек
-                        Роскошное постельное белье
-                        Детские кровати (по запросу)
-                        Фирменная кровать Luxury Collection
-                        УДОБСТВА И УСЛУГИ В НОМЕРАХ
-                        Услуга «утренняя побудка»
-                        Ежевечерняя подготовка номера ко сну
-                        Пресс для утюжки брюк
-                        Набор для шитья
-                        Сопровождение в номер после регистрации
-                        Услуги по чистке обуви
-                        Зонтики
-                        Обслуживание автомашин работниками отеля
-                        Датчики дыма и система пожаротушения
-                        ДОСТУП В ИНТЕРНЕТ
-                        Доступ в Интернет в номерах (Бесплатно)
-                        Некоторые из удобств могут предоставляться не во всех номерах.
-                        За некоторые удобства/услуги может взиматься дополнительная плата.
-                        Заселение: 14:00 Выезд: 12:00</p>
+                    </p>
+                    <h4>ВАННАЯ КОМНАТА</h4>
+                    <ul>
+                        <li>Ванные принадлежности Penhaligon's</li>
+                        <li>Фен</li>
+                        <li>Зеркало для макияжа и бритья</li>
+                        <li>Банные халаты и тапочки</li>
+                        <li>Весы в ванной комнате</li>
+                    </ul>
+                    <h4>ЕДА</h4>
+                    <ul>
+                        <li>Круглосуточная доставка еды в номер</li>
+                        <li>Кофеварка и чайник (по запросу)</li>
+                        <li>Мини-бар (платный)</li>
+                        <li>Бесплатная вода в бутылках</li>
+                    </ul>
+                    <h4>ОПИСАНИЕ НОМЕРА</h4>
+                    <ul>
+                        <li>Кондиционер</li>
+                        <li>Сейф для ноутбука в номере</li>
+                        <li>Зеркало в полный рост</li>
+                    </ul>
+                    <h4>РАЗВЛЕЧЕНИЯ</h4>
+                    <ul>
+                        <li>Журналы</li>
+                        <li>Спутниковые каналы</li>
+                        <li>Плоский ЖК-телевизор</li>
+                    </ul>
+                    <h4>РАЗНОВИДНОСТИ КРОВАТЕЙ</h4>
+                    <ul>
+                        <li>Ассортимент гипоаллергенных подушек</li>
+                        <li>Роскошное постельное белье</li>
+                        <li>Детские кровати (по запросу)</li>
+                        <li>Фирменная кровать Luxury Collection</li>
+                    </ul>
+                    <h4>УДОБСТВА И УСЛУГИ В НОМЕРАХ</h4>
+                    <ul>
+                        <li>Услуга «утренняя побудка»</li>
+                        <li>Ежевечерняя подготовка номера ко сну</li>
+                        <li>Набор для шитья</li>
+                        <li>Сопровождение в номер после регистрации</li>
+                        <li>Услуги по чистке обуви</li>
+                        <li>Зонтики</li>
+                        <li>Обслуживание автомашин работниками отеля</li>
+                        <li>Датчики дыма и система пожаротушения</li>
+                    </ul>
+                    <h4>ДОСТУП В ИНТЕРНЕТ</h4>
+                    <ul>
+                        <li>Доступ в Интернет в номерах (Бесплатно)</li>
+                        <li>Некоторые из удобств могут предоставляться не во всех номерах.</li>
+                        <li>За некоторые удобства/услуги может взиматься дополнительная плата.</li>
+                    </ul>
+                    <h3>Заселение: 14:00 Выезд: 12:00</h3>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"
@@ -235,46 +241,6 @@
                 data:{pageName:'setRoomId', roomId:roomId}
             });
         }
-        $(function () {
-            // инициализация datetimepicker7 и datetimepicker8
-            $("#datetimepicker1").datetimepicker({
-                format: 'DD.MM.YYYY'
-            });
-            $('#datetimepicker1').data("DateTimePicker").minDate(moment('22.07.2018','DD.MM.YYYY'));
-
-            $("#datetimepicker2").datetimepicker({
-                format: 'DD.MM.YYYY',
-                useCurrent: false
-
-            });
-
-            $("#datetimepicker1").on("dp.change", function (e) {
-                $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
-            });
-            $("#datetimepicker2").on("dp.change", function (e) {
-                $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
-            });
-        });
-        $(function () {
-            // инициализация datetimepicker7 и datetimepicker8
-            $("#datetimepicker7").datetimepicker({
-                format: 'DD.MM.YYYY'
-            });
-            $('#datetimepicker7').data("DateTimePicker").minDate(moment('22.07.2018','DD.MM.YYYY'));
-
-            $("#datetimepicker8").datetimepicker({
-                format: 'DD.MM.YYYY',
-                useCurrent: false
-
-            });
-
-            $("#datetimepicker7").on("dp.change", function (e) {
-                $('#datetimepicker8').data("DateTimePicker").minDate(e.date);
-            });
-            $("#datetimepicker8").on("dp.change", function (e) {
-                $('#datetimepicker7').data("DateTimePicker").maxDate(e.date);
-            });
-        });
 
     </script>
 
