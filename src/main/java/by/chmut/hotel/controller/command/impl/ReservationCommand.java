@@ -1,5 +1,6 @@
 package by.chmut.hotel.controller.command.impl;
 
+import by.chmut.hotel.bean.Reservation;
 import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
@@ -38,6 +39,7 @@ public class ReservationCommand implements Command {
         if (roomId != null) {
             Room room = getRoomById(req, roomId);
             temporaryRooms.add(room);
+            saveReservation(user,room,req); // lock room for other users
             totalSum += room.getPrice();
             session.removeAttribute("roomId");
             session.setAttribute("tempRooms", temporaryRooms);
@@ -47,6 +49,7 @@ public class ReservationCommand implements Command {
         if (temporaryNumber != null) {
             Room room = getRoomByIdFromTemp(temporaryRooms, temporaryNumber);
             temporaryRooms.remove(room);
+            deleteReservation(user,room,req);
             totalSum -= room.getPrice();
             session.removeAttribute("temporaryNumber");
             session.setAttribute("tempRooms", temporaryRooms);
@@ -61,6 +64,19 @@ public class ReservationCommand implements Command {
         req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
 
 
+    }
+
+    private void deleteReservation(User user, Room room, HttpServletRequest req) {
+    }
+
+    private void saveReservation(User user, Room room, HttpServletRequest req) {
+        try {
+            Reservation reservation = factory.getReservationService().save(new Reservation(user.getId(),
+                    room.getId(), room.getCheckIn(), room.getCheckOut(), LocalDate.now()));
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(), e);
+        }
     }
 
     private void setPaidRoomsInSession(HttpServletRequest req, User user) {

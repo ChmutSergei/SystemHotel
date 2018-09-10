@@ -56,6 +56,12 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
         }
         return list;
     }
+
+    @Override
+    public List<Room> getAvailableRoom() {
+        return null;
+    }
+
     public List<Room> getRoomByDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut) throws DAOException {
         List<Room> list = new ArrayList<>();
         try {

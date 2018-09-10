@@ -15,8 +15,15 @@ public class Reservation {
     private int roomId;
     private LocalDate checkIn;
     private LocalDate checkOut;
-    private LocalDate date;
+    private LocalDate date; // String date in format YYYY MM DD HH MM
 
+    public Reservation(int userId, int roomId, LocalDate checkIn, LocalDate checkOut, LocalDate date) {
+        this.userId = userId;
+        this.roomId = roomId;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.date = date;
+    }
 
     @Override
     public boolean equals(Object o) {

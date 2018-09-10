@@ -6,7 +6,7 @@ CREATE TABLE Users(id INT PRIMARY KEY AUTO_INCREMENT, login CHAR(20), password C
                    role CHAR (15),contact_id INT, FOREIGN KEY (contact_id) REFERENCES Contacts(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 CREATE TABLE Rooms(id INT PRIMARY KEY AUTO_INCREMENT, roomNumber INT,type CHAR(15),bedType INT,
                    price INT, description TEXT);
-CREATE TABLE Reservation (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, room_id INT,checkIn DATE,checkOut DATE, date DATE,
+CREATE TABLE Reservation (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, room_id INT,checkIn DATE,checkOut DATE, date DATETIME, payment INT,
   FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE,
   FOREIGN KEY (room_id) REFERENCES Rooms(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
 INSERT INTO Users (login, password , name , lastname, role) VALUES ("admin", "tZxnvxlqR1gZHkL3ZnDOug==","Valeriy", "Manager", "admin");
@@ -46,11 +46,11 @@ VALUES (8,'СуперЛюкс',1,899,
 INSERT INTO Rooms(roomNumber, type, bedType, price,  description)
 VALUES (9,'СуперЛюкс',4,1895,
         'Приятный и уютный номер распологается на первом этаже с видом на город');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (2,2,'2018-09-03','2018-09-05','2018-07-10');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (3,3,'2018-09-05','2018-09-06','2018-07-10');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (4,4,'2018-09-05','2018-09-07','2018-07-10');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (5,5,'2018-09-02','2018-09-05','2018-07-10');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (6,6,'2018-09-05','2018-06-07','2018-07-10');
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date) VALUES (7,7,'2018-09-05','2018-06-07','2018-07-10');
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (2,2,'2018-09-03','2018-09-05','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (3,3,'2018-09-05','2018-09-06','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (4,4,'2018-09-05','2018-09-07','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (5,5,'2018-09-02','2018-09-05','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (6,6,'2018-09-05','2018-06-07','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (7,7,'2018-09-05','2018-06-07','2018-07-10 10:00:00',1);
 
 
