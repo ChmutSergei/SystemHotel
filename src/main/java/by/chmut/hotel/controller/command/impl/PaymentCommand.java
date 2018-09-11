@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
@@ -35,7 +34,7 @@ public class PaymentCommand implements Command {
         // Create reservation
         if ("success".equals(req.getParameter("payment"))) {
 
-            createReservation(req, temporaryRooms);
+            setPaidStatusForReservation(req, temporaryRooms);
 
             removeAttributesAndSetSuccess(req.getSession());
         }
@@ -68,19 +67,12 @@ public class PaymentCommand implements Command {
         session.setAttribute("success","yes!");
     }
 
-    private void createReservation(HttpServletRequest req, List<Room> rooms) {
+    private void setPaidStatusForReservation(HttpServletRequest req, List<Room> rooms) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-        int userId = user.getId();
         for (Room room:rooms) {
-            Reservation reservation = new Reservation();
-            reservation.setUserId(userId);
-            reservation.setRoomId(room.getId());
-            reservation.setCheckIn(room.getCheckIn());
-            reservation.setCheckOut(room.getCheckOut());
-            reservation.setDate(LocalDate.now());
             try {
-                reservationService.save(reservation);
+                reservationService.setPaidStatus(user.getId(),room);
             } catch (ServiceException e) {
                 Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
                 logger.error(e.getMessage(),e);

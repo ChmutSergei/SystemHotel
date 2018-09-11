@@ -16,7 +16,7 @@ public interface RoomService {
 
     int delete(Serializable id) throws ServiceException;
 
-    List<Room> getRoomByDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut) throws ServiceException;
-
     List<Room> getAllRoom() throws ServiceException;
+
+    List<Room> getAvailableRoom(int bedType, LocalDate checkIn, LocalDate checkOut) throws ServiceException;
 }

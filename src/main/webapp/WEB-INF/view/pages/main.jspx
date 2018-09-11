@@ -197,7 +197,7 @@
                                 <h4>Количество спальных мест - ${room.bedType} </h4>
                                 <p class="card-text" style="font-size: large">${room.description}</p>
                                 <h4 class="card-text" style="color: #c09c76">
-                                    Всего : ${room.price}
+                                    Всего : ${room.price/100}
                                 </h4>
                                 <div class="row" style="height: 40px">
                                     <a href="${pageContext.request.contextPath}/frontController?pageName=search" style="color: #c09c76"><fmt:message key="main.more" bundle="${i18n}"/></a>

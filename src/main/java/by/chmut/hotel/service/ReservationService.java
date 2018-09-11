@@ -5,7 +5,6 @@ import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.bean.User;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ReservationService {
@@ -22,4 +21,7 @@ public interface ReservationService {
 
     List<Room> getPaidRoomsIfUserHasThem(User user) throws ServiceException;
 
+    int deleteTemporaryReservation(int userId, Room room) throws ServiceException;
+
+    void setPaidStatus(int userId, Room room) throws ServiceException;
 }

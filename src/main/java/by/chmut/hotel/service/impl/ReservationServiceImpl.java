@@ -100,5 +100,29 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
         }
     }
 
+    @Override
+    public int deleteTemporaryReservation(int userId, Room room) throws ServiceException {
+        int rows = 0;
+        try {
+            startTransaction();
+            rows = reservationDao.deleteTemporaryReservation(userId, room);
+            commit();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return rows;
+    }
+
+    @Override
+    public void setPaidStatus(int userId, Room room) throws ServiceException {
+        try {
+            startTransaction();
+            reservationDao.setPaidStatus(userId,room);
+            commit();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
 
 }

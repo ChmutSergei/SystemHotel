@@ -99,7 +99,7 @@
                             <h3>Количество спальных мест - ${room.bedType} </h3>
                             <p class="card-text" style="font-size: large">${room.description}</p>
                             <p class="card-text">
-                                Всего : ${room.price}
+                                Всего : ${room.price/100}
                             </p>
                             <div class="btnlearnmore" style="margin: 10px !important;">
                                 <button class="bnt" onclick="document.getElementById('id02').style.display='block'"

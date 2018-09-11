@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
@@ -15,14 +16,14 @@ public class Reservation {
     private int roomId;
     private LocalDate checkIn;
     private LocalDate checkOut;
-    private LocalDate date; // String date in format YYYY MM DD HH MM
+    private LocalDateTime dateTime; // date in format YYYY MM DD HH MM
+    private int payment; //  0 - unpaid  |  1 - paid
 
-    public Reservation(int userId, int roomId, LocalDate checkIn, LocalDate checkOut, LocalDate date) {
+    public Reservation(int userId, int roomId, LocalDate checkIn, LocalDate checkOut) {
         this.userId = userId;
         this.roomId = roomId;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.date = date;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class Reservation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
-        if (id != that.id || userId != that.userId || roomId != that.roomId) {
+        if (id != that.id || userId != that.userId || roomId != that.roomId || payment != that.payment) {
             return false;
         }
         if (checkIn == null) {
@@ -47,11 +48,11 @@ public class Reservation {
         } else if (!checkOut.equals(that.checkOut)) {
             return false;
         }
-        if (date == null) {
-            if (that.date != null) {
+        if (dateTime == null) {
+            if (that.dateTime != null) {
                 return false;
             }
-        } else if (!date.equals(that.date)) {
+        } else if (!dateTime.equals(that.dateTime)) {
             return false;
         }
         return true;
@@ -63,7 +64,10 @@ public class Reservation {
         result = result * 37 + id;
         result = result * 37 + userId;
         result = result * 37 + roomId;
-        result = result * 37 + (date == null ? 0 : date.hashCode()) * result;
+        result = result * 37 + payment;
+        result = result * 37 + (checkIn == null ? 0 : checkIn.hashCode()) * result;
+        result = result * 37 + (checkOut == null ? 0 : checkOut.hashCode()) * result;
+        result = result * 37 + (dateTime == null ? 0 : dateTime.hashCode()) * result;
         return result;
     }
 
@@ -73,7 +77,10 @@ public class Reservation {
                 "id=" + id +
                 ", userId=" + userId +
                 ", roomId=" + roomId +
-                ", date=" + date +
+                ", checkIn=" + checkIn +
+                ", checkOut=" + checkOut +
+                ", dateTime=" + dateTime +
+                ", payment=" + payment +
                 '}';
     }
 }

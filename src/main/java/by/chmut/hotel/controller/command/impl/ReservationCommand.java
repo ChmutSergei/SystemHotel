@@ -39,7 +39,7 @@ public class ReservationCommand implements Command {
         if (roomId != null) {
             Room room = getRoomById(req, roomId);
             temporaryRooms.add(room);
-            saveReservation(user,room,req); // lock room for other users
+            saveReservation(user,room,req); // lock room for other users  - (15 min or more (if user pay for reservation)))
             totalSum += room.getPrice();
             session.removeAttribute("roomId");
             session.setAttribute("tempRooms", temporaryRooms);
@@ -49,7 +49,7 @@ public class ReservationCommand implements Command {
         if (temporaryNumber != null) {
             Room room = getRoomByIdFromTemp(temporaryRooms, temporaryNumber);
             temporaryRooms.remove(room);
-            deleteReservation(user,room,req);
+            deleteReservation(user,room,req); // unlock room for other users
             totalSum -= room.getPrice();
             session.removeAttribute("temporaryNumber");
             session.setAttribute("tempRooms", temporaryRooms);
@@ -67,12 +67,17 @@ public class ReservationCommand implements Command {
     }
 
     private void deleteReservation(User user, Room room, HttpServletRequest req) {
+        try {
+            factory.getReservationService().deleteTemporaryReservation(user.getId(),room);
+        } catch (ServiceException e) {
+            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
+            logger.error(e.getMessage(), e);
+        }
     }
 
     private void saveReservation(User user, Room room, HttpServletRequest req) {
         try {
-            Reservation reservation = factory.getReservationService().save(new Reservation(user.getId(),
-                    room.getId(), room.getCheckIn(), room.getCheckOut(), LocalDate.now()));
+            factory.getReservationService().save(new Reservation(user.getId(),room.getId(), room.getCheckIn(), room.getCheckOut()));
         } catch (ServiceException e) {
             Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
             logger.error(e.getMessage(), e);

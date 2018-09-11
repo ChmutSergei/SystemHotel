@@ -23,34 +23,34 @@ INSERT INTO Rooms(roomNumber, type, bedType, price, description)
 VALUES (1,'Супер Люкс',3,1289,
         'Приятный и уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (2,'Люкс',2,589,
+VALUES (2,'Люкс',2,5890,
         'Уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
 VALUES (3,'Супер Люкс',2,1159,
         'Приятный и уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (4,'Люкс',3,1099,
+VALUES (4,'Люкс',3,10990,
         'Уютный номер распологается на втором этаже с видом во двор.');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (5,'Люкс',1,899,
+VALUES (5,'Люкс',1,8990,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (6,'Люкс',1,799,
+VALUES (6,'Люкс',1,7990,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price, description)
-VALUES (7,'Люкс',1,829,
+VALUES (7,'Люкс',1,8290,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price,  description)
-VALUES (8,'СуперЛюкс',1,899,
+VALUES (8,'СуперЛюкс',1,8990,
         'Приятный и уютный номер распологается на первом этаже с видом на паркинг');
 INSERT INTO Rooms(roomNumber, type, bedType, price,  description)
-VALUES (9,'СуперЛюкс',4,1895,
+VALUES (9,'СуперЛюкс',4,18950,
         'Приятный и уютный номер распологается на первом этаже с видом на город');
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (2,2,'2018-09-03','2018-09-05','2018-07-10 10:00:00',1);
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (3,3,'2018-09-05','2018-09-06','2018-07-10 10:00:00',1);
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (4,4,'2018-09-05','2018-09-07','2018-07-10 10:00:00',1);
 INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (5,5,'2018-09-02','2018-09-05','2018-07-10 10:00:00',1);
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (6,6,'2018-09-05','2018-06-07','2018-07-10 10:00:00',1);
-INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (7,7,'2018-09-05','2018-06-07','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (6,6,'2018-09-05','2018-09-07','2018-07-10 10:00:00',1);
+INSERT INTO Reservation(room_id, user_id,checkIn,checkOut, date, payment) VALUES (7,7,'2018-09-05','2018-09-07','2018-07-10 10:00:00',1);
 
 

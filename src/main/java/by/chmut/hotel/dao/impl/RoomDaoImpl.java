@@ -15,18 +15,25 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.chmut.hotel.controller.command.impl.constant.Constants.CTY_MINUTES_FOR_PAYMENT;
+
 public class RoomDaoImpl extends AbstractDao implements RoomDao {
 
     private static final String selectById = "SELECT * FROM Rooms WHERE id=?";
+
     private static final String selectAllRoom = "SELECT * FROM Rooms";
-    private static final String selectOnDateAndBedType = "SELECT room_id,roomNumber, type, bedType, price, description " +
-            "FROM Rooms JOIN Reservation ON Rooms.id = Reservation.room_id WHERE bedType=? AND ((checkOut<=?)|(checkIn>=?))";
+
     private static final String addRoom = "INSERT INTO Rooms (roomNumber, type, bedType, price, checkIn, checkOut, description) " +
             "VALUES (?,?,?,?, now(), now(),?)";
+
     private static final String updateRoom = "UPDATE Rooms SET type=?, bedType=?, price=?," +
             " description=? WHERE roomNumber=?";
 
     private static final String deleteRoom = "DELETE FROM Rooms WHERE id=?";
+
+    private static final String getAvailableRoom ="SELECT * FROM Rooms WHERE bedType=? AND Rooms.id NOT IN " +
+            "(SELECT R.id FROM Rooms R JOIN Reservation RS ON R.id = RS.room_id WHERE (payment = 1  AND " +
+            "(checkOut>?) AND (checkIn<?)) OR (payment = 0 AND (SELECT TIMESTAMPDIFF (MINUTE,date,now()))<? AND checkOut>? AND checkIn<?))";
 
     private Room setRoomFromResultSet(ResultSet rs) throws DAOException {
         Room room = new Room();
@@ -58,24 +65,23 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
     }
 
     @Override
-    public List<Room> getAvailableRoom() {
-        return null;
-    }
-
-    public List<Room> getRoomByDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut) throws DAOException {
+    public List<Room> getAvailableRoom(int bedType, LocalDate checkIn, LocalDate checkOut) throws DAOException {
         List<Room> list = new ArrayList<>();
         try {
-            PreparedStatement psSearchRoom = prepareStatement(selectOnDateAndBedType);
+            PreparedStatement psSearchRoom = prepareStatement(getAvailableRoom);
             psSearchRoom.setInt(1, bedType);
             psSearchRoom.setDate(2, java.sql.Date.valueOf(checkIn));
             psSearchRoom.setDate(3, java.sql.Date.valueOf(checkOut));
+            psSearchRoom.setInt(4,CTY_MINUTES_FOR_PAYMENT);
+            psSearchRoom.setDate(5, java.sql.Date.valueOf(checkIn));
+            psSearchRoom.setDate(6, java.sql.Date.valueOf(checkOut));
             ResultSet rs = psSearchRoom.executeQuery();
             while (rs.next()) {
                 list.add(setRoomFromResultSet(rs));
             }
             close(rs);
         } catch (SQLException e) {
-            throw new DAOException("Error with get Room by date and bedType",e);
+            throw new DAOException("Error with get available Rooms",e);
         }
         return list;
     }

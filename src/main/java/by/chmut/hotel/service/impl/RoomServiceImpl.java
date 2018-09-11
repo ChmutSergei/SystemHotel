@@ -63,10 +63,10 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
     }
 
     @Override
-    public List<Room> getRoomByDateAndBedType(int bedType, LocalDate checkIn, LocalDate checkOut) throws ServiceException {
+    public List<Room> getAllRoom() throws ServiceException {
         try {
             startTransaction();
-            List<Room> room = roomDao.getRoomByDateAndBedType(bedType,checkIn,checkOut);
+            List<Room> room = roomDao.getAllRoom();
             commit();
             return room;
         } catch (DAOException e) {
@@ -75,10 +75,10 @@ public class RoomServiceImpl extends AbstractService implements RoomService {
     }
 
     @Override
-    public List<Room> getAllRoom() throws ServiceException {
+    public List<Room> getAvailableRoom(int bedType, LocalDate checkIn, LocalDate checkOut) throws ServiceException {
         try {
             startTransaction();
-            List<Room> room = roomDao.getAllRoom();
+            List<Room> room = roomDao.getAvailableRoom(bedType, checkIn, checkOut);
             commit();
             return room;
         } catch (DAOException e) {

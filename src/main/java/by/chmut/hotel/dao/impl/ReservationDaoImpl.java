@@ -1,5 +1,6 @@
 package by.chmut.hotel.dao.impl;
 
+import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.dao.AbstractDao;
 import by.chmut.hotel.dao.DAOException;
 import by.chmut.hotel.dao.ReservationDao;
@@ -10,17 +11,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
 
-    private static final String saveQuery = "INSERT INTO Reservation (user_id, room_id, checkIn, checkOut,date) " +
-            "VALUES (?,?,?,?,now())";
+    private static final String saveQuery = "INSERT INTO Reservation (user_id, room_id, checkIn, checkOut, date, payment) " +
+            "VALUES (?,?,?,?,now(),0)";
     private static final String getQuery = "SELECT * FROM Reservation WHERE id=?";
     private static final String getQueryUserId = "SELECT * FROM Reservation WHERE user_id=?";
+    private static final String deleteTempReservation = "DELETE FROM Reservation WHERE payment=0 AND user_id=? " +
+            "AND room_id=? AND checkIn=? AND checkOut=?";
     private static final String updateQuery = "UPDATE Reservation SET room_id=? WHERE id=?";
+    private static final String updatePayment = "UPDATE Reservation SET payment=1 WHERE user_id=? AND room_id=? " +
+            "AND checkIn=? AND checkOut=?";
     private static final String deleteQuery = "DELETE FROM Reservation WHERE id=?";
 
 
@@ -32,7 +37,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             reservation.setRoomId(rs.getInt(3));
             reservation.setCheckIn(rs.getDate(4).toLocalDate());
             reservation.setCheckOut(rs.getDate(5).toLocalDate());
-            reservation.setDate(rs.getDate(6).toLocalDate());
+            reservation.setDateTime(rs.getTimestamp(6).toLocalDateTime());
         } catch (SQLException e) {
             throw new DAOException("Error with set params from ResultSet",e);
         }
@@ -57,6 +62,37 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
     }
 
     @Override
+    public int deleteTemporaryReservation(int userId, Room room) throws DAOException {
+        int rows;
+        try {
+            PreparedStatement psDeleteTemp = prepareStatement(deleteTempReservation);
+            psDeleteTemp.setInt(1, userId);
+            psDeleteTemp.setInt(2, room.getId());
+            psDeleteTemp.setDate(3, java.sql.Date.valueOf(room.getCheckIn()));
+            psDeleteTemp.setDate(4, java.sql.Date.valueOf(room.getCheckOut()));
+            rows = psDeleteTemp.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error with delete temporary reservation",e);
+        }
+        return rows;
+    }
+
+    @Override
+    public void setPaidStatus(int userId, Room room) throws DAOException {
+        try {
+            PreparedStatement psUpdatePayment = prepareStatement(updatePayment);
+            psUpdatePayment.setInt(1, userId);
+            psUpdatePayment.setInt(2, room.getId());
+            psUpdatePayment.setDate(3, java.sql.Date.valueOf(room.getCheckIn()));
+            psUpdatePayment.setDate(4, java.sql.Date.valueOf(room.getCheckOut()));
+            psUpdatePayment.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("Error with set paid status for reservation",e);
+        }
+
+    }
+
+    @Override
     public Reservation save(Reservation reservation) throws DAOException {
         try {
             PreparedStatement psReservation = prepareStatement(saveQuery, Statement.RETURN_GENERATED_KEYS);
@@ -70,7 +106,8 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
                 reservation.setId(rs.getInt(1));
             }
             close(rs);
-            reservation.setDate(LocalDate.now());
+            reservation.setDateTime(LocalDateTime.now());
+            reservation.setPayment(0); // set unpaid when save reservation
         } catch (SQLException e) {
             throw new DAOException("Error with save Reservation",e);
         }

@@ -49,7 +49,7 @@ public class SearchCommand implements Command {
             req.getSession().setAttribute("checkIn",checkInDate);
             req.getSession().setAttribute("checkOut",checkOutDate);
             try {
-                rooms = roomService.getRoomByDateAndBedType(bedTypeInt,
+                rooms = roomService.getAvailableRoom(bedTypeInt,
                         checkInDate, checkOutDate);
             } catch (ServiceException e) {
                 Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
