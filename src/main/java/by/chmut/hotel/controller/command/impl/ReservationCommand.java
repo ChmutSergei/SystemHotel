@@ -39,7 +39,7 @@ public class ReservationCommand implements Command {
         if (roomId != null) {
             Room room = getRoomById(req, roomId);
             temporaryRooms.add(room);
-            saveReservation(user,room,req); // lock room for other users  - (15 min or more (if user pay for reservation)))
+            saveReservation(user,room,req); // lock room for other users  - (35 min or more (if user pay for reservation)))
             totalSum += room.getPrice();
             session.removeAttribute("roomId");
             session.setAttribute("tempRooms", temporaryRooms);

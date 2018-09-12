@@ -89,10 +89,12 @@ public class ReservationServiceImpl extends AbstractService implements Reservati
             }
             List<Room> result = new ArrayList<>();
             for (Reservation reservation : lastReservations) {
-                Room room = factory.getRoomDao().get(reservation.getRoomId());
-                room.setCheckIn(reservation.getCheckIn());
-                room.setCheckOut(reservation.getCheckOut());
-                result.add(room);
+                if (reservation.getPayment() == 1) {
+                    Room room = factory.getRoomDao().get(reservation.getRoomId());
+                    room.setCheckIn(reservation.getCheckIn());
+                    room.setCheckOut(reservation.getCheckOut());
+                    result.add(room);
+                }
             }
             return result;
         } catch (DAOException e) {

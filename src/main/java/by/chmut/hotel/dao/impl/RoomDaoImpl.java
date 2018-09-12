@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.chmut.hotel.controller.command.impl.constant.Constants.CTY_MINUTES_FOR_PAYMENT;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.QUANTITY_MINUTES_FOR_PAYMENT;
 
 public class RoomDaoImpl extends AbstractDao implements RoomDao {
 
@@ -72,7 +72,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
             psSearchRoom.setInt(1, bedType);
             psSearchRoom.setDate(2, java.sql.Date.valueOf(checkIn));
             psSearchRoom.setDate(3, java.sql.Date.valueOf(checkOut));
-            psSearchRoom.setInt(4,CTY_MINUTES_FOR_PAYMENT);
+            psSearchRoom.setInt(4, QUANTITY_MINUTES_FOR_PAYMENT);
             psSearchRoom.setDate(5, java.sql.Date.valueOf(checkIn));
             psSearchRoom.setDate(6, java.sql.Date.valueOf(checkOut));
             ResultSet rs = psSearchRoom.executeQuery();
