@@ -19,7 +19,7 @@ public class LogoutCommand implements Command {
 
         String contextPath = req.getContextPath();
 
-        resp.sendRedirect(contextPath+ "/frontController?pageName="+req.getSession().getAttribute("prevPage"));
+        resp.sendRedirect(contextPath+ "/frontController?commandName="+req.getSession().getAttribute("prevPage"));
 
     }
 

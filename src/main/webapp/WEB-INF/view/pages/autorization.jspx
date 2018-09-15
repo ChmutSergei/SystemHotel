@@ -15,7 +15,7 @@
     <fieldset id="contact" class="container">
         <h2><fmt:message bundle="${i18n}" key="contact.registration"/></h2>
         <p><fmt:message bundle="${i18n}" key="contact.info"/></p>
-        <form class="form-horizontal" action="${pageContext.request.contextPath}/frontController?pageName=create_user" method="post">
+        <form class="form-horizontal" action="${pageContext.request.contextPath}/frontController?commandName=create_user" method="post">
             <![CDATA[
             <legend>
             ]]>

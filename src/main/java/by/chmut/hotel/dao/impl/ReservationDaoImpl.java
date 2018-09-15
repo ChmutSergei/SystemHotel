@@ -38,6 +38,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             reservation.setCheckIn(rs.getDate(4).toLocalDate());
             reservation.setCheckOut(rs.getDate(5).toLocalDate());
             reservation.setDateTime(rs.getTimestamp(6).toLocalDateTime());
+            reservation.setPayment(rs.getInt(7));
         } catch (SQLException e) {
             throw new DAOException("Error with set params from ResultSet",e);
         }

@@ -25,7 +25,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/frontController?pageName=home">${navName}</a>
+                                        <a href="${pageContext.request.contextPath}/frontController?commandName=home">${navName}</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -36,7 +36,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/frontController?pageName=search">${navName}</a>
+                                        <a href="${pageContext.request.contextPath}/frontController?commandName=search">${navName}</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -47,7 +47,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/frontController?pageName=reservation">${navName}</a>
+                                        <a href="${pageContext.request.contextPath}/frontController?commandName=reservation">${navName}</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -60,7 +60,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <li>
-                                        <a href="${pageContext.request.contextPath}/frontController?pageName=administration">${navName}</a>
+                                        <a href="${pageContext.request.contextPath}/frontController?commandName=administration">${navName}</a>
                                     </li>
                                 </c:otherwise>
                             </c:choose>
@@ -68,7 +68,7 @@
                         </ul>
                         <fmt:setLocale value="${sessionScope.locale}"/>
                         <fmt:setBundle basename="messages" var="i18n"/>
-                        <c:url var="path" value="/frontController?pageName=${title}"></c:url>
+                        <c:url var="path" value="/frontController?commandName=${title}"></c:url>
                         <a id="navbrand" class="navbar-brand col-xs-3" href="#">Hotel Paradise</a>
                         <ul id="rightbar" class="nav navbar-nav navbar-right">
                             <c:choose>
@@ -93,7 +93,7 @@
                             </c:choose>
                             <c:if test="${not empty user}">
                                 <c:set var="basket"><fmt:message key="header.order" bundle="${i18n}"/></c:set>
-                                <li><a href="${pageContext.request.contextPath}/frontController?pageName=reservation"
+                                <li><a href="${pageContext.request.contextPath}/frontController?commandName=reservation"
                                        data-toggle="tooltip" title="${basket}"><span
                                         class="glyphicon glyphicon-list-alt"></span></a></li>
 
@@ -101,12 +101,12 @@
                                                                             bundle="${i18n}"/>, ${user.name}!</p></li>
                             </c:if>
                             <c:if test="${not empty user}">
-                                <li><a href="${pageContext.request.contextPath}/frontController?pageName=logout"><span
+                                <li><a href="${pageContext.request.contextPath}/frontController?commandName=logout"><span
                                         class="glyphicon glyphicon-user"></span><fmt:message key="header.signout"
                                                                                              bundle="${i18n}"/></a></li>
                             </c:if>
                             <c:if test="${empty user}">
-                                <!--and not (pageName eq 'Login'-->
+                                <!--and not (commandName eq 'Login'-->
                                 <li>
                                     <button id="bntlog" onclick="document.getElementById('id01').style.display='block'"
                                             style="width:auto;"><span class="glyphicon glyphicon-log-in"></span><fmt:message key="header.signin"
@@ -126,7 +126,7 @@
     <!--  Modal  -->
     <div id="id01" class="modal">
 
-        <form class="modal-content animate" action="${pageContext.request.contextPath}/frontController?pageName=login"
+        <form class="modal-content animate" action="${pageContext.request.contextPath}/frontController?commandName=login"
               method="post">
             <fmt:setLocale value="${sessionScope.locale}"/>
             <fmt:setBundle basename="messages" var="i18n"/>
@@ -148,7 +148,7 @@
                 <button id="btmodcl" type="button" onclick="document.getElementById('id01').style.display='none'"
                         class="cancelbtn"><fmt:message bundle="${i18n}" key="login.cancel"/></button>
                 <span id="joinnow" class="regist"><fmt:message bundle="${i18n}" key="login.reginf"/>
-                    <a href="${pageContext.request.contextPath}/frontController?pageName=add_account"><fmt:message
+                    <a href="${pageContext.request.contextPath}/frontController?commandName=add_account"><fmt:message
                         bundle="${i18n}" key="login.regist"/>?</a></span><span class="psw"><fmt:message bundle="${i18n}" key="login.forgot"/><a href="#"><fmt:message
                         bundle="${i18n}" key="login.password"/>?</a></span>
             </div>

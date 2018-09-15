@@ -12,38 +12,62 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.validation.Validator.isPasswordValid;
 
 
 public class LoginCommand implements Command {
+
     private ServiceFactory factory = ServiceFactory.getInstance();
-    private UserService userService =factory.getUserService();
+
+    private static final Logger logger = Logger.getLogger(LoginCommand.class);
+
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
         String login = req.getParameter("uname");
+
         String password = req.getParameter("psw");
+
         if (login==null || password==null) {
+
             RequestDispatcher dispatcher = req.getRequestDispatcher(MAIN_PAGE);
+
             dispatcher.forward(req, resp);
+
             return;
         }
+
         User user = null;
-        try {
-            user = userService.getUserByLogin(login);
-        } catch (ServiceException e) {
-            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-            logger.error(e.getMessage(),e);
-        }
+
         String contextPath = req.getContextPath();
-        if (user != null && user.getPassword().equals(Encoder.encode(password))) {
-            req.getSession().setAttribute("user", user);
-            req.getSession().setAttribute("errorMsg", "");
-            resp.sendRedirect(contextPath+ "/frontController?pageName="+req.getSession().getAttribute("prevPage"));
-        } else {
-            req.getSession().setAttribute("errorMsg", "errorLog");
-            resp.sendRedirect(contextPath + "/frontController?pageName=add_account");
+
+        HttpSession session = req.getSession();
+
+        String errorMessage = "errorLog";
+
+        String url = contextPath + "/frontController?commandName=add_account";
+        try {
+            user = factory.getUserService().getUserByLogin(login);
+
+            if (isPasswordValid(user, password)) {
+
+                session.setAttribute("user", user);
+
+                errorMessage = "";
+
+                url = contextPath+ "/frontController?commandName="+req.getSession().getAttribute("prevPage");
+
+            }
+        } catch (ServiceException e) {
+            logger.error(e);
         }
+        session.setAttribute("errorMsg", errorMessage);
+
+        resp.sendRedirect(url);
+
     }
 }

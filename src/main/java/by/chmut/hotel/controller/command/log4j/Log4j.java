@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 @WebServlet(loadOnStartup = 1, urlPatterns = "/log4j",name = "Log4j",
         initParams = {@WebInitParam(name = "logfile", value = "WEB-INF/log4j.properties")})
 
-public class Log4jInit extends HttpServlet {
+public class Log4j extends HttpServlet {
 
     @Override
 

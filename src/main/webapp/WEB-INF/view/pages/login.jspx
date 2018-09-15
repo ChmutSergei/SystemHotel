@@ -3,7 +3,7 @@
     <html>
     <head><title>View User</title></head>
     <body>
-    <form action="${pageContext.request.contextPath}/frontController?pageName=login" method="post">
+    <form action="${pageContext.request.contextPath}/frontController?commandName=login" method="post">
     <div class="form">
         <label for="login">Login:</label>
         <input type="text" class="form-control" id="login" placeholder="Enter Login" name="login"/>

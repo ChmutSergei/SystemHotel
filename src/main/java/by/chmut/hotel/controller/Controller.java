@@ -1,7 +1,8 @@
 package by.chmut.hotel.controller;
 
-import by.chmut.hotel.controller.command.CommandDirector;
+import by.chmut.hotel.controller.command.CommandType;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,17 +15,11 @@ import java.io.IOException;
 public class Controller extends HttpServlet {
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pageName = req.getParameter("pageName");
-        if (pageName == null || pageName.isEmpty()) {
-            pageName = "home";
-        }
-        HttpSession session = req.getSession();
-        CommandDirector command = CommandDirector.selectCommand(pageName);
-        session.setAttribute("pagePath",command.getPagePath());
-        req.setAttribute("title",command.getPageName());
-        command.getCommand().execute(req,resp);
-        session.setAttribute("prevPage",pageName);
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        CommandType commandType = RequestHandler.get(request);
+
+        commandType.getCommand().execute(request,response);
 
     }
 

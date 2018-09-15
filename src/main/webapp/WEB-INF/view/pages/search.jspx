@@ -20,7 +20,7 @@
                         <span class="headBar col-xs-12" style="font-size: large;padding: 5px;"><strong><fmt:message key="navbar.head" bundle="${i18n}"/></strong></span>
                         <c:set var="namecheckin"><fmt:message key="navbar.checkin" bundle="${i18n}"/></c:set>
                         <c:set var="namecheckout"><fmt:message key="navbar.checkout" bundle="${i18n}"/></c:set>
-                        <form action="${pageContext.request.contextPath}/frontController?pageName=search" name="booking" method="post">
+                        <form action="${pageContext.request.contextPath}/frontController?commandName=search" name="booking" method="post">
                             <div class="form-group">
                                 <c:choose>
                                     <c:when test="${not empty sessionScope.checkIn}">
@@ -109,7 +109,7 @@
                                     <c:when test="${not empty sessionScope.checkIn}">
                                 <a id="${room.id}" class="reservation" role="button"
                                    style="font-size: 25px;color: black;background-color:transparent;text-decoration: none;"
-                                   href="${pageContext.request.contextPath}/frontController?pageName=reservation"><fmt:message key="rooms.reserv" bundle="${i18n}"/>
+                                   href="${pageContext.request.contextPath}/frontController?commandName=reservation"><fmt:message key="rooms.reserv" bundle="${i18n}"/>
                                 </a>
                                     </c:when>
                                     <c:otherwise>
@@ -238,7 +238,7 @@
             $.ajax({
                 type: 'post',
                 url: contextUrl + '/frontController',
-                data:{pageName:'setRoomId', roomId:roomId}
+                data:{commandName:'setRoomId', roomId:roomId}
             });
         }
 

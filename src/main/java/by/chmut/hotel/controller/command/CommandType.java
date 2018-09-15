@@ -2,7 +2,7 @@ package by.chmut.hotel.controller.command;
 
 import by.chmut.hotel.controller.command.impl.*;
 
-public enum CommandDirector {
+public enum CommandType {
 
     HOME("Home", "pages/main.jspx", new DefaultCommand()),
 
@@ -26,29 +26,18 @@ public enum CommandDirector {
 
     SET_UNIQUE_NUMBER("SetUniqueNumber", "", new SetUniqueNumRoomCommand());
 
-    private String pageName;
+    private String commandName;
     private String pagePath;
     private Command command;
 
-    CommandDirector(String pageName, String pagePath, Command command) {
-        this.pageName = pageName;
+    CommandType(String commandName, String pagePath, Command command) {
+        this.commandName = commandName;
         this.pagePath = pagePath;
         this.command = command;
     }
 
-    public static CommandDirector selectCommand(String pageName) {
-
-        for (CommandDirector type : CommandDirector.values()) {
-
-            if (type.pageName.equalsIgnoreCase(pageName)) {
-                return type;
-            }
-        }
-        return HOME;
-    }
-
-    public String getPageName() {
-        return pageName;
+    public String getCommandName() {
+        return commandName;
     }
 
     public String getPagePath() {

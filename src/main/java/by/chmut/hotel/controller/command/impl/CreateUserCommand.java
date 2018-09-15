@@ -33,10 +33,10 @@ public class CreateUserCommand implements Command {
         String contextPath = req.getContextPath();
         if (user == null) {
             req.getSession().setAttribute("errorMsg","haveuser");
-            resp.sendRedirect(contextPath + "/frontController?pageName=add_account");
+            resp.sendRedirect(contextPath + "/frontController?commandName=add_account");
         } else {
             req.getSession().setAttribute("user", user);
-            resp.sendRedirect(contextPath + "/frontController?pageName=reservation");
+            resp.sendRedirect(contextPath + "/frontController?commandName=reservation");
         }
     }
 }

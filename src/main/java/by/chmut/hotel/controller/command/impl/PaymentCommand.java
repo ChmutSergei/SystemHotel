@@ -49,7 +49,7 @@ public class PaymentCommand implements Command {
 
             String contextPath = req.getContextPath();
 
-            resp.sendRedirect(contextPath+ "/frontController?pageName=payment&payment=success");
+            resp.sendRedirect(contextPath+ "/frontController?commandName=payment&payment=success");
 
         } else {
 
@@ -59,7 +59,7 @@ public class PaymentCommand implements Command {
 
     private void removeAttributesAndSetSuccess(HttpSession session) {
         // Remove attribute
-        session.removeAttribute("roomTemp");
+        session.removeAttribute("tempRooms");
         session.removeAttribute("checkIn");
         session.removeAttribute("checkOut");
         session.removeAttribute("totalSum");

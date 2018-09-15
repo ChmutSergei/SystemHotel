@@ -19,7 +19,7 @@
             <div class="creditCardForm col-xs-6 col-xs-offset-3">
                 <div class="payment">
                     <form class="form-horizontal"
-                          action="${pageContext.request.contextPath}/frontController?pageName=payment"
+                          action="${pageContext.request.contextPath}/frontController?commandName=payment"
                           method="post">
                         <![CDATA[
                           <legend>
@@ -141,7 +141,7 @@
 
             <!--<div class="row col-xs-6 col-xs-offset-3">-->
                 <!--<form class="form-horizontal"-->
-                      <!--action="${pageContext.request.contextPath}/frontController?pageName=payment"-->
+                      <!--action="${pageContext.request.contextPath}/frontController?commandName=payment"-->
                       <!--method="post">-->
                     <!--<![CDATA[-->
             <!--<legend>-->

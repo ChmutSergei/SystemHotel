@@ -24,7 +24,7 @@
     <fmt:setLocale value="${sessionScope.locale}" />
     <fmt:setBundle basename="messages" var="i18n" />
     <title>
-        <fmt:message bundle="${i18n}" key="${title}" />
+        <fmt:message bundle="${i18n}" key="${sessionScope.title}" />
     </title>
     <!--Include users tag  FOR TASK !!! -->
     <mytag:icon file="page_title.ico" />

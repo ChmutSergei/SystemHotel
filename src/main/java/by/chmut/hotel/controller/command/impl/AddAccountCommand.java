@@ -23,7 +23,7 @@ public class AddAccountCommand implements Command {
 
             String contextPath = req.getContextPath();
 
-            resp.sendRedirect(contextPath + "/frontController?pageName=reservation");
+            resp.sendRedirect(contextPath + "/frontController?commandName=reservation");
         }
     }
 }
