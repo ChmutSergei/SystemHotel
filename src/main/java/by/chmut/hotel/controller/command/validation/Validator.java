@@ -1,7 +1,8 @@
 package by.chmut.hotel.controller.command.validation;
 
 import by.chmut.hotel.bean.User;
-import by.chmut.hotel.controller.command.encoder.Encoder;
+import by.chmut.hotel.controller.command.validation.encoder.Encoder;
+
 
 public class Validator {
 

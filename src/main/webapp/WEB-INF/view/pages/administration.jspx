@@ -5,6 +5,12 @@
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="messages" var="i18n"/>
     <div class="container col-xs-12" style="background-color:#e6f7d9;">
+        <c:if test="${not empty sessionScope.errorAdmin}">
+            <c:set var="ermessage"><fmt:message key="${sessionScope.errorAdmin}" bundle="${i18n}"/></c:set>
+            <div class="alert alert-warning col-xs-6 left-arrow">
+                <strong>${ermessage}</strong>
+            </div>
+        </c:if>
 
         <div class="container">
             <div class="row">

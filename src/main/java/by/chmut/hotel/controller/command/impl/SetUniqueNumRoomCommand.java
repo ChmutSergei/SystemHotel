@@ -15,6 +15,5 @@ public class SetUniqueNumRoomCommand implements Command {
 
         req.getSession().setAttribute("tempNum",tempNumber);
 
-
     }
 }

@@ -9,7 +9,8 @@
     <c:if test="${not empty sessionScope.errorMsg}">
         <c:set var="ermessage"><fmt:message key="${sessionScope.errorMsg}" bundle="${i18n}"/></c:set>
         <div class="alert alert-warning col-xs-6 left-arrow">
-             <strong>${ermessage}</strong><fmt:message bundle="${i18n}" key="error.messagereg"/>
+             <strong>${ermessage}</strong>
+            <!--<fmt:message bundle="${i18n}" key="error.messagereg"/>-->
         </div>
     </c:if>
     <fieldset id="contact" class="container">

@@ -1,5 +1,6 @@
 package by.chmut.hotel.filter;
 
+import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.RequestHandler;
 import by.chmut.hotel.controller.command.CommandType;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 
 import static by.chmut.hotel.controller.command.CommandType.PAYMENT;
 import static by.chmut.hotel.controller.command.CommandType.RESERVATION;
+import static by.chmut.hotel.controller.command.CommandType.ADMIN;
 
 @WebFilter (urlPatterns = "/frontController")
 public class AuthenticationFilter implements Filter {
@@ -29,17 +31,25 @@ public class AuthenticationFilter implements Filter {
 
         CommandType type = RequestHandler.get(req);
 
-        if (RESERVATION.equals(type)||PAYMENT.equals(type)) {
+        String contextPath = req.getContextPath();
 
-            String contextPath = req.getContextPath();
+        HttpSession session = req.getSession();
 
-            HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
 
-            if((session.getAttribute("user") == null)) {
+        if (RESERVATION.equals(type)||PAYMENT.equals(type)||ADMIN.equals(type)) {
+
+            if (user == null)  {
 
                 session.setAttribute("errorMsg", "accessLog");
 
                 res.sendRedirect(contextPath + "/frontController?commandName=add_account");
+
+                return;
+            }
+            if (!user.getRole().equals("admin") & ADMIN.equals(type)) {
+
+                res.sendRedirect(contextPath + "/frontController?commandName=home");
 
                 return;
             }

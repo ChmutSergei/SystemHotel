@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAGE;
+import static by.chmut.hotel.controller.command.impl.constant.Constants.PATH_FOR_ERROR_PAGE;
 
 
 public class SearchCommand implements Command {
 
     private ServiceFactory factory = ServiceFactory.getInstance();
-    private RoomService roomService = factory.getRoomService();
+
+    private static final Logger logger = Logger.getLogger(SearchCommand.class);
 
 
     @Override
@@ -30,35 +32,36 @@ public class SearchCommand implements Command {
         String bedType = req.getParameter("bedtype");
         String checkIn = req.getParameter("checkin");
         String checkOut = req.getParameter("checkout");
-        LocalDate checkInDate;
-        LocalDate checkOutDate;
-        int bedTypeInt;
         List<Room> rooms = new ArrayList<>();
-        if (bedType == null||checkIn==null||checkOut==null) {
-            try {
-                rooms = roomService.getAllRoom();
-            } catch (ServiceException e) {
-                Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-                logger.error(e.getMessage(),e);
-            }
-        } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            checkInDate = LocalDate.parse(checkIn,formatter);
-            checkOutDate = LocalDate.parse(checkOut,formatter);
-            bedTypeInt = Integer.parseInt(bedType);
-            req.getSession().setAttribute("checkIn",checkInDate);
-            req.getSession().setAttribute("checkOut",checkOutDate);
-            try {
-                rooms = roomService.getAvailableRoom(bedTypeInt,
-                        checkInDate, checkOutDate);
-            } catch (ServiceException e) {
-                Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-                logger.error(e.getMessage(),e);
-            }
-        }
-        req.getSession().setAttribute("rooms", rooms);
-        req.getRequestDispatcher(MAIN_PAGE).forward(req,resp);
+        try {
+            if (bedType == null || checkIn == null || checkOut == null) {
 
+                rooms = factory.getRoomService().getAllRoom();
+
+            } else {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
+                LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
+                int bedTypeInt = Integer.parseInt(bedType);
+                req.getSession().setAttribute("checkIn", checkInDate);
+                req.getSession().setAttribute("checkOut", checkOutDate);
+
+                rooms = factory.getRoomService().getAvailableRoom(bedTypeInt,
+                        checkInDate, checkOutDate);
+            }
+        } catch (ServiceException e) {
+
+            logger.error(e);
+
+            req.getSession().setAttribute("pagePath", PATH_FOR_ERROR_PAGE);
+
+            req.getSession().setAttribute("message", "main.error");
+
+        }
+
+        req.getSession().setAttribute("rooms", rooms);
+
+        req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
 
     }
 }

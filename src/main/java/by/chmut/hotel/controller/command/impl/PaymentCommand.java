@@ -1,11 +1,9 @@
 package by.chmut.hotel.controller.command.impl;
 
-import by.chmut.hotel.bean.Reservation;
 import by.chmut.hotel.bean.Room;
 import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
 import by.chmut.hotel.controller.command.validation.PaymentSender;
-import by.chmut.hotel.service.ReservationService;
 import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
 import org.apache.log4j.Logger;
@@ -23,7 +21,7 @@ public class PaymentCommand implements Command {
 
     private ServiceFactory factory = ServiceFactory.getInstance();
 
-    private ReservationService reservationService = factory.getReservationService();
+    private static final Logger logger = Logger.getLogger(PaymentCommand.class);
 
 
     @Override
@@ -31,25 +29,15 @@ public class PaymentCommand implements Command {
 
         List<Room> temporaryRooms = (List<Room>) req.getSession().getAttribute("tempRooms");
 
-        // Create reservation
-        if ("success".equals(req.getParameter("payment"))) {
+        if (makePaymentWithParams(req)) {
 
             setPaidStatusForReservation(req, temporaryRooms);
 
-            removeAttributesAndSetSuccess(req.getSession());
-        }
-
-        // check payment
-        PaymentSender paymentSender = new PaymentSender(req.getParameter("numCard"), req.getParameter("nameCard"),
-                req.getParameter("cvc2"));
-
-        String request = paymentSender.payment();
-
-        if (request.equals("true")) {
+            removeAttributes(req.getSession());
 
             String contextPath = req.getContextPath();
 
-            resp.sendRedirect(contextPath+ "/frontController?commandName=payment&payment=success");
+            resp.sendRedirect(contextPath + "/frontController?commandName=payment&success=ok");
 
         } else {
 
@@ -57,25 +45,51 @@ public class PaymentCommand implements Command {
         }
     }
 
-    private void removeAttributesAndSetSuccess(HttpSession session) {
-        // Remove attribute
+    private boolean makePaymentWithParams(HttpServletRequest req) {
+
+        if ( req.getSession().getAttribute("totalSum") != null ){
+
+            PaymentSender paymentSender = new PaymentSender(req.getParameter("numCard"), req.getParameter("nameCard"),
+                    req.getParameter("cvc2"));
+
+            return paymentSender.payment().equals("true");
+        }
+        return false;
+    }
+
+    private void removeAttributes(HttpSession session) {
         session.removeAttribute("tempRooms");
         session.removeAttribute("checkIn");
         session.removeAttribute("checkOut");
         session.removeAttribute("totalSum");
-        // Set success )))
-        session.setAttribute("success","yes!");
     }
 
     private void setPaidStatusForReservation(HttpServletRequest req, List<Room> rooms) {
+
         HttpSession session = req.getSession();
+
         User user = (User) session.getAttribute("user");
-        for (Room room:rooms) {
-            try {
-                reservationService.setPaidStatus(user.getId(),room);
-            } catch (ServiceException e) {
-                Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-                logger.error(e.getMessage(),e);
+
+        for (Room room : rooms) {
+            int count = 0;
+            int maxTries = 3;
+
+            while (true) {
+
+                try {
+                    if (count == maxTries) {
+                        break;
+                    }
+                    factory.getReservationService().setPaidStatus(user.getId(), room);
+
+                    break;
+
+                } catch (ServiceException e) {
+
+                    logger.error(e);
+
+                    count++;
+                }
             }
         }
     }

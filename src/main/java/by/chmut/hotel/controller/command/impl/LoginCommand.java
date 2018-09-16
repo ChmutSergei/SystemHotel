@@ -2,10 +2,8 @@ package by.chmut.hotel.controller.command.impl;
 
 import by.chmut.hotel.bean.User;
 import by.chmut.hotel.controller.command.Command;
-import by.chmut.hotel.controller.command.encoder.Encoder;
 import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.ServiceFactory;
-import by.chmut.hotel.service.UserService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -65,6 +63,7 @@ public class LoginCommand implements Command {
         } catch (ServiceException e) {
             logger.error(e);
         }
+
         session.setAttribute("errorMsg", errorMessage);
 
         resp.sendRedirect(url);

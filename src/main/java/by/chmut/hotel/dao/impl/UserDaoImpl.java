@@ -75,6 +75,7 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
             }
             close(rs);
             return user;
+
         } catch (SQLException e) {
             throw new DAOException("Error with save User", e);
         }

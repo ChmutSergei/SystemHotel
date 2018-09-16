@@ -53,10 +53,12 @@ public class RequestHandler {
             title = HOME.getCommandName();
 
         }
+        if (!title.equals(commandType.getCommandName())) {
 
+            session.setAttribute("prevPage", title);
+
+        }
         session.setAttribute("title", commandType.getCommandName());
-
-        session.setAttribute("prevPage", title);
 
         session.setAttribute("pagePath", commandType.getPagePath());
 

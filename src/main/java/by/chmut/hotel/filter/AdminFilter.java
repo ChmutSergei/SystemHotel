@@ -21,16 +21,22 @@ public class AdminFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse res = (HttpServletResponse) servletResponse;
-        String contextPath = req.getContextPath();
+
         HttpSession session = req.getSession();
+
         User user = (User) session.getAttribute("user");
+
         if (user != null && user.getRole().equals("admin")) {
+
             session.setAttribute("admin", "admin");
+
         } else {
+
             session.setAttribute("admin","user");
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

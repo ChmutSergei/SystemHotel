@@ -4,15 +4,18 @@
           xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
           version="2.0">
 
-    <div class="container col-xs-12" style="background-color:#e6f7d9;">
+    <div class="container col-xs-12" style="background-color:#e6f7d9;height: 1000px;">
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="messages" var="i18n"/>
     <c:choose>
-        <c:when test="${not empty sessionScope.success}">
+        <c:when test="${not empty param.success}">
             <h2><strong><fmt:message bundle="${i18n}" key="payment.success"/></strong>></h2>
         </c:when>
         <c:otherwise>
             <h2><fmt:message bundle="${i18n}" key="payment.start"/></h2>
+            <c:if test="${not empty sessionScope.totalSum}">
+            <p><fmt:message bundle="${i18n}" key="payment.totalSum"/> ${sessionScope.totalSum/100}</p>
+            </c:if>
             <p><fmt:message bundle="${i18n}" key="payment.info"/></p>
 
             <!--Payment form-->
@@ -129,64 +132,6 @@
                     </table>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-            <!--<div class="row col-xs-6 col-xs-offset-3">-->
-                <!--<form class="form-horizontal"-->
-                      <!--action="${pageContext.request.contextPath}/frontController?commandName=payment"-->
-                      <!--method="post">-->
-                    <!--<![CDATA[-->
-            <!--<legend>-->
-            <!--]]>-->
-                    <!--<fmt:message bundle="${i18n}" key="payment.payinfo"/>-->
-                    <!--<![CDATA[-->
-            <!--</legend>-->
-            <!--]]>-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label col-xs-3" for="nameCard"><fmt:message bundle="${i18n}"-->
-                                                                                          <!--key="payment.name"/></label>-->
-                        <!--<div class="col-xs-6">-->
-                            <!--<c:set var="inputcname"><fmt:message key="input.cname" bundle="${i18n}"/></c:set>-->
-                            <!--<input type="text" class="form-control" id="nameCard" placeholder="${inputcname}"-->
-                                   <!--name="nameCard"-->
-                                   <!--required=""/>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label col-xs-3" for="numCard"><fmt:message bundle="${i18n}"-->
-                                                                                         <!--key="payment.num"/></label>-->
-                        <!--<div class="col-xs-6">-->
-                            <!--<c:set var="inputcnum"><fmt:message key="input.cnum" bundle="${i18n}"/></c:set>-->
-                            <!--<input type="text" class="form-control" id="numCard" placeholder="${inputcnum}"-->
-                                   <!--name="numCard"-->
-                                   <!--required=""/>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                        <!--<label class="control-label col-xs-3" for="cvc2"><fmt:message bundle="${i18n}"-->
-                                                                                      <!--key="payment.cvc"/></label>-->
-                        <!--<div class="col-xs-6">-->
-                            <!--<c:set var="inputcvc"><fmt:message key="input.cvc" bundle="${i18n}"/></c:set>-->
-                            <!--<input type="text" class="form-control" id="cvc2" placeholder="${inputcnum}" name="cvc2"-->
-                                   <!--required=""/>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="form-group">-->
-                        <!--<div class="col-xs-offset-3 col-xs-6">-->
-                            <!--<c:set var="submit"><fmt:message key="payment.submit" bundle="${i18n}"/></c:set>-->
-                            <!--<input type="submit" class="btn btn-primary col-xs-3" value="${submit}"/>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
         </c:otherwise>
     </c:choose>
 

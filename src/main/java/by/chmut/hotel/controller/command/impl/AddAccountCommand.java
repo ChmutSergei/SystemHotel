@@ -19,6 +19,7 @@ public class AddAccountCommand implements Command {
             req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
 
             req.getSession().setAttribute("errorMsg", "");
+
         } else {
 
             String contextPath = req.getContextPath();

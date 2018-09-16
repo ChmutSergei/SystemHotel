@@ -16,6 +16,5 @@ public class SetRoomIdCommand implements Command {
 
         req.getSession().setAttribute("roomId",roomId);
 
-
     }
 }

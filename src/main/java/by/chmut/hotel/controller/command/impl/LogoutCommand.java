@@ -13,24 +13,11 @@ public class LogoutCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        HttpSession session = req.getSession();
-
-        removeAttributes(session);
+        req.getSession().removeAttribute("user");
 
         String contextPath = req.getContextPath();
 
         resp.sendRedirect(contextPath+ "/frontController?commandName="+req.getSession().getAttribute("prevPage"));
 
-    }
-
-
-
-    private void removeAttributes(HttpSession session) {
-        session.removeAttribute("user");
-        session.removeAttribute("roomTemp");
-        session.removeAttribute("checkIn");
-        session.removeAttribute("checkOut");
-        session.removeAttribute("totalSum");
-        session.removeAttribute("errorMsg");
     }
 }

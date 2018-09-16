@@ -16,9 +16,11 @@ public class AttributeListener  implements HttpSessionAttributeListener {
     private static final long START_TIME_FOR_REMOVE_ROOMS = 2100000; // 5 min - cancel order unlock room
     private static final long START_TIME_FOR_REMOVE_WARNING = 2100000; // remove warning message
     private static final long PERIOD = 1800000;
-    private String attribute = "tempRooms";
+    private String attributeTemporaryRoom = "tempRooms";
+    private String attributeError = "error";
 
     public void attributeAdded(HttpSessionBindingEvent ev) {
+
         HttpSession session = ev.getSession();
 
         String currentAttributeName = ev.getName();
@@ -31,7 +33,7 @@ public class AttributeListener  implements HttpSessionAttributeListener {
 
         Timer timer = new Timer();
 
-        if (currentAttributeName.equals(attribute)) {
+        if (currentAttributeName.equals(attributeTemporaryRoom)) {
 
             timer.schedule(warning,START_TIME_FOR_WARNING,PERIOD);
 
@@ -39,6 +41,10 @@ public class AttributeListener  implements HttpSessionAttributeListener {
 
             timer.schedule(removeWarning,START_TIME_FOR_REMOVE_WARNING,PERIOD);
 
+        }
+
+        if (currentAttributeName.equals(attributeError)) {
+            removeAttributes(session);
         }
     }
 
@@ -73,9 +79,27 @@ public class AttributeListener  implements HttpSessionAttributeListener {
         };
         return timerTask;
     }
+
+    private void removeAttributes(HttpSession session) {
+        session.removeAttribute("tempRooms");
+        session.removeAttribute("checkIn");
+        session.removeAttribute("checkOut");
+        session.removeAttribute("totalSum");
+        session.removeAttribute("errorMsg");
+        session.removeAttribute("tempNum");
+        session.removeAttribute("roomId");
+
+    }
     @Override
     public void attributeRemoved(HttpSessionBindingEvent httpSessionBindingEvent) {
 
+        HttpSession session = httpSessionBindingEvent.getSession();
+
+        String currentAttributeName = httpSessionBindingEvent.getName();
+
+        if (currentAttributeName.equals("user")) {
+            removeAttributes(session);
+        }
     }
 
     @Override

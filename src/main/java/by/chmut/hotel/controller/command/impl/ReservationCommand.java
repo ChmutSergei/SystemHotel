@@ -21,11 +21,15 @@ import static by.chmut.hotel.controller.command.impl.constant.Constants.MAIN_PAG
 
 
 public class ReservationCommand implements Command {
+
     private ServiceFactory factory = ServiceFactory.getInstance();
+
+    private static final Logger logger = Logger.getLogger(ReservationCommand.class);
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         HttpSession session = req.getSession();
+        session.removeAttribute("error");
         long totalSum = getTotalSum(session);
         List<Room> temporaryRooms = getRooms(session);
         Integer roomId = (Integer) session.getAttribute("roomId");
@@ -35,25 +39,30 @@ public class ReservationCommand implements Command {
         // search - if user user has paid reservation - set to session for view
         setPaidRoomsInSession(req, user);
 
-        // Add room
-        if (roomId != null) {
-            Room room = getRoomById(req, roomId);
-            temporaryRooms.add(room);
-            saveReservation(user,room,req); // lock room for other users  - (35 min or more (if user pay for reservation)))
-            totalSum += room.getPrice();
-            session.removeAttribute("roomId");
-            session.setAttribute("tempRooms", temporaryRooms);
-            session.setAttribute("totalSum", totalSum);
-        }
-        // Remove room
-        if (temporaryNumber != null) {
-            Room room = getRoomByIdFromTemp(temporaryRooms, temporaryNumber);
-            temporaryRooms.remove(room);
-            deleteReservation(user,room,req); // unlock room for other users
-            totalSum -= room.getPrice();
-            session.removeAttribute("temporaryNumber");
-            session.setAttribute("tempRooms", temporaryRooms);
-            session.setAttribute("totalSum", totalSum);
+        try {
+            // Add room
+            if (roomId != null) {
+                Room room = getRoomById(req, roomId);
+                temporaryRooms.add(room);
+                factory.getReservationService().save(new Reservation(user.getId(), room.getId(), room.getCheckIn(), room.getCheckOut()));
+                totalSum += room.getPrice();
+                session.removeAttribute("roomId");
+                session.setAttribute("tempRooms", temporaryRooms);
+                session.setAttribute("totalSum", totalSum);
+            }
+            // Remove room
+            if (temporaryNumber != null) {
+                Room room = getRoomByIdFromTemp(temporaryRooms, temporaryNumber);
+                temporaryRooms.remove(room);
+                factory.getReservationService().deleteTemporaryReservation(user.getId(), room);
+                totalSum -= room.getPrice();
+                session.removeAttribute("tempNum");
+                session.setAttribute("tempRooms", temporaryRooms);
+                session.setAttribute("totalSum", totalSum);
+            }
+        } catch (ServiceException e) {
+            logger.error(e);
+            req.getSession().setAttribute("error", "errorReservation");
         }
 
 
@@ -66,43 +75,19 @@ public class ReservationCommand implements Command {
 
     }
 
-    private void deleteReservation(User user, Room room, HttpServletRequest req) {
-        try {
-            factory.getReservationService().deleteTemporaryReservation(user.getId(),room);
-        } catch (ServiceException e) {
-            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    private void saveReservation(User user, Room room, HttpServletRequest req) {
-        try {
-            factory.getReservationService().save(new Reservation(user.getId(),room.getId(), room.getCheckIn(), room.getCheckOut()));
-        } catch (ServiceException e) {
-            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-            logger.error(e.getMessage(), e);
-        }
-    }
-
     private void setPaidRoomsInSession(HttpServletRequest req, User user) {
         try {
             req.getSession().setAttribute("paidRooms", factory.getReservationService().getPaidRoomsIfUserHasThem(user));
         } catch (ServiceException e) {
-            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-            logger.error(e.getMessage(), e);
+            logger.error(e);
         }
     }
 
 
-    private Room getRoomById(HttpServletRequest req, int roomId) {
-        Room result = new Room();
-        try {
-            result = factory.getRoomService().get(roomId);
-            result.setTemporaryNumber((int) (Math.random() * 1000000) + (int) (Math.random() * 1000));
-        } catch (ServiceException e) {
-            Logger logger = (Logger) req.getServletContext().getAttribute("log4j");
-            logger.error(e.getMessage(), e);
-        }
+    private Room getRoomById(HttpServletRequest req, int roomId) throws ServiceException {
+        Room result;
+        result = factory.getRoomService().get(roomId);
+        result.setTemporaryNumber((int) (Math.random() * 1000000) + (int) (Math.random() * 1000));
         result.setCheckIn((LocalDate) req.getSession().getAttribute("checkIn"));
         result.setCheckOut((LocalDate) req.getSession().getAttribute("checkOut"));
         return result;
