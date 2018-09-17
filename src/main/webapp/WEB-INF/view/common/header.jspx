@@ -139,7 +139,7 @@
 
                 <button id="btmodin" type="submit"><fmt:message bundle="${i18n}" key="login.submit"/></button>
                 <label>
-                    <input type="checkbox" checked="checked" name="remember"/> <fmt:message bundle="${i18n}"
+                    <input type="checkbox" name="remember"/> <fmt:message bundle="${i18n}"
                                                                                             key="login.remember"/>
                 </label>
             </div>

@@ -4,14 +4,20 @@ import by.chmut.hotel.dao.AbstractDao;
 import by.chmut.hotel.dao.DAOException;
 import by.chmut.hotel.dao.UserDao;
 import by.chmut.hotel.bean.User;
+import by.chmut.hotel.dao.rememberme.CookieUtils;
 
+import javax.servlet.http.Cookie;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static by.chmut.hotel.controller.command.impl.constant.Constants.REMEMBER_ME_COOKIE;
+
 public class UserDaoImpl extends AbstractDao implements UserDao {
+
+    private final CookieUtils cookieUtils = CookieUtils.getInstance();
 
     private static final String selectUserByLogin = "SELECT Users.id,Users.login,Users.password,Users.name," +
             "Users.lastname,Users.role FROM Users WHERE Users.login = ?";
@@ -23,8 +29,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     private static final String getContactID = "SELECT contact_id FROM Users WHERE id=?";
     private static final String updateUser = "UPDATE Contacts SET email=?, telephone=?, country=?, city=?, address=?, zip=? WHERE id=?";
     private static final String deleteUser = "DELETE FROM Users WHERE id=?";
+    private static final String getLoginAndToken = "SELECT username, token FROM persistent_logins WHERE series = ?";
+    private static final String addLoginAndToken = "INSERT INTO persistent_logins (username, series, token, last_used) VALUES (?, ?, ?, now())";
 
-    public User getUserByLogin(String login) throws DAOException {
+    public User getUser(String login) throws DAOException {
         try {
             PreparedStatement ps = prepareStatement(selectUserByLogin);
             ps.setString(1, login);
@@ -42,6 +50,58 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         } catch (SQLException e) {
             throw new DAOException("Error with get User by login", e);
         }
+    }
+
+    @Override
+    public User getUser(Cookie cookie) throws DAOException {
+        User result = null;
+        String[] cookieTokens = cookieUtils.decodeCookie(cookie.getValue());
+        String presentedSeries = cookieTokens[0];
+        String presentedToken = cookieTokens[1];
+        if (cookieTokens.length != 2 || presentedSeries == null) {
+            return null;
+        }
+        String login = null;
+        String token = "";
+        try {
+            PreparedStatement ps = prepareStatement(getLoginAndToken);
+            ps.setString(1, presentedSeries);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                login = rs.getString(1);
+                token = rs.getString(2);
+            }
+            if ((token.equals(presentedToken)) & login != null) {
+                result = getUser(login);
+            }
+        } catch (SQLException e) {
+            throw new DAOException("Error with get Token", e);
+        }
+        return result;
+    }
+
+    @Override
+    public Cookie addToken(User user) throws DAOException {
+        String login = user.getLogin();
+        String series = String.valueOf(generateRandom());
+        String token = String.valueOf(generateRandom());
+        try {
+            PreparedStatement ps = prepareStatement(addLoginAndToken);
+            ps.setString(1, login);
+            ps.setString(2, series);
+            ps.setString(3, token);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String[] cookieTokens = {series,token};
+        String cookieValue = cookieUtils.encodeCookie(cookieTokens);
+        Cookie result = new Cookie(REMEMBER_ME_COOKIE,cookieValue);
+        return result;
+    }
+
+    private int generateRandom() {
+        return (int) (Math.random() * 1000000) + (int) (Math.random() * 1000);
     }
 
     @Override

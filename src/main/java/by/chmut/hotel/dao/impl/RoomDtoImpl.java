@@ -15,7 +15,7 @@ import java.util.List;
 public class RoomDtoImpl extends AbstractDao implements Dto {
 
     String selectData = "SELECT roomNumber,bedType,checkIn,checkOut, name,lastname,telephone,city,price FROM " +
-            "Reservation JOIN Users U on user_id = U.id JOIN Rooms R on room_id = R.id JOIN Contacts C on U.contact_id = C.id " +
+            "Reservation JOIN Users U on user_id = U.id JOIN Rooms RememberMeTokenImpl on room_id = RememberMeTokenImpl.id JOIN Contacts C on U.contact_id = C.id " +
             "WHERE  checkIn=? OR checkOut=?";
 
     public List<RoomDto> getAllRoomsWhereCheckInOrCheckOutEqualsDate(LocalDate date) throws DAOException {

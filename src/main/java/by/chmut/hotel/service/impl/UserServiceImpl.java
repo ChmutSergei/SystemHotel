@@ -7,6 +7,8 @@ import by.chmut.hotel.bean.User;
 import by.chmut.hotel.service.ServiceException;
 import by.chmut.hotel.service.UserService;
 
+import javax.servlet.http.Cookie;
+
 public class UserServiceImpl extends AbstractService implements UserService {
 
     private DAOFactory factory = DAOFactory.getInstance();
@@ -14,10 +16,22 @@ public class UserServiceImpl extends AbstractService implements UserService {
     private UserDao userDao = factory.getUserDao();
 
     @Override
-    public User getUserByLogin(String login) throws ServiceException{
+    public User getUser(String login) throws ServiceException{
         try {
             startTransaction();
-            User user = userDao.getUserByLogin(login);
+            User user = userDao.getUser(login);
+            commit();
+            return user;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public User getUser(Cookie cookie) throws ServiceException {
+        try {
+            startTransaction();
+            User user = userDao.getUser(cookie);
             commit();
             return user;
         } catch (DAOException e) {
@@ -30,7 +44,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
                         String city, String address, String zip) throws ServiceException {
         try {
             startTransaction();
-            User user = userDao.getUserByLogin(login);
+            User user = userDao.getUser(login);
             commit();
             if (user.getId() == 0) {
                 startTransaction();
@@ -41,6 +55,18 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 user = null;
             }
             return user;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Cookie addRememberMe(User user) throws ServiceException {
+        try {
+            startTransaction();
+            Cookie cookie = factory.getUserDao().addToken(user);
+            commit();
+            return cookie;
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

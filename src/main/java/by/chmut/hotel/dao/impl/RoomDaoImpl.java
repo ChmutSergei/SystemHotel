@@ -32,7 +32,7 @@ public class RoomDaoImpl extends AbstractDao implements RoomDao {
     private static final String deleteRoom = "DELETE FROM Rooms WHERE id=?";
 
     private static final String getAvailableRoom ="SELECT * FROM Rooms WHERE bedType=? AND Rooms.id NOT IN " +
-            "(SELECT R.id FROM Rooms R JOIN Reservation RS ON R.id = RS.room_id WHERE (payment = 1  AND " +
+            "(SELECT RememberMeTokenImpl.id FROM Rooms RememberMeTokenImpl JOIN Reservation RS ON RememberMeTokenImpl.id = RS.room_id WHERE (payment = 1  AND " +
             "(checkOut>?) AND (checkIn<?)) OR (payment = 0 AND (SELECT TIMESTAMPDIFF (MINUTE,date,now()))<? AND checkOut>? AND checkIn<?))";
 
     private Room setRoomFromResultSet(ResultSet rs) throws DAOException {

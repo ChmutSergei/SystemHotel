@@ -18,6 +18,7 @@ import static by.chmut.hotel.controller.command.CommandType.ADMIN;
 @WebFilter (urlPatterns = "/frontController")
 public class AuthenticationFilter implements Filter {
 
+
     @Override
     public void init(FilterConfig filterConfig){
     }
@@ -36,6 +37,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = req.getSession();
 
         User user = (User) session.getAttribute("user");
+
 
         if (RESERVATION.equals(type)||PAYMENT.equals(type)||ADMIN.equals(type)) {
 

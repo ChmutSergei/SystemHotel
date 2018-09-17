@@ -9,6 +9,9 @@ CREATE TABLE Rooms(id INT PRIMARY KEY AUTO_INCREMENT, roomNumber INT,type CHAR(1
 CREATE TABLE Reservation (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, room_id INT,checkIn DATE,checkOut DATE, date DATETIME, payment INT,
   FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE  CASCADE  ON UPDATE CASCADE,
   FOREIGN KEY (room_id) REFERENCES Rooms(id) ON DELETE  CASCADE  ON UPDATE CASCADE);
+CREATE TABLE persistent_logins (username VARCHAR(64) NOT NULL ,series VARCHAR(64) NOT NULL PRIMARY KEY,
+token VARCHAR(64) NOT NULL, last_used TIMESTAMP NOT NULL);
+
 INSERT INTO Users (login, password , name , lastname, role) VALUES ("admin", "tZxnvxlqR1gZHkL3ZnDOug==","Valeriy", "Manager", "admin");
 INSERT INTO Contacts(email, telephone, country, city, address, zip) VALUES ("cl@tu.by","37529424454","Belarus","Minsk","some adr","220000");
 INSERT INTO Contacts(email, telephone, country, city, address, zip) VALUES ("d@tut.by","37533454","Russia","Smolensk","some adr","220000");
